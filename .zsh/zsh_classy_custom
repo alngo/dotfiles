@@ -1,0 +1,31 @@
+_put_git_branch()
+{
+	git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+_git_is_diff()
+{ 
+	git diff --quiet 2> /dev/null || echo '*'
+}
+
+_git_is_stat()
+{
+	git diff --stat | tail -n1 | sed -e 's/[[:alpha:]. ]//g' -e 's/,/ : /g'
+}
+
+prompt_cmd()
+{
+	local current_dir='%F{red}[%f%~% %F{red}]%f'
+	local git_branch="$(_put_git_branch)"
+
+	if [ ${#git_branch} -ne 0 ]; then
+		local git_diff="$(_git_is_diff)"
+		local git_modified="%B%F{blue}{ %$(_git_is_stat) %B%F{blue}}%b%f"
+		git_branch="%b%F{cyan}- %B%F{black}< %B%F{yellow}${git_branch}${git_diff}%B%F{black} >%b%f"
+	fi
+
+	PS1="%B%F{red}┌─╼ ${current_dir}%b%f${git_branch} ${git_modified}
+%F{red}└╼ %f "
+}
+
+#git diff --stat | tail -n1 | sed -e 's/[[:alpha:]. ]//g' -e 's/,/ : /g'
