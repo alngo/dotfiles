@@ -20,7 +20,7 @@ prompt_cmd()
 
 	if [ ${#git_branch} -ne 0 ]; then
 		local git_diff="$(_git_is_diff)"
-		local git_modified="%B%F{blue}{ %B%F{green}%$(_git_is_stat) %B%F{blue}}%b%f"
+		local git_modified="%B%F{blue}{ %B%F{green}$(_git_is_stat) %B%F{blue}}%b%f"
 		git_branch="%b%F{cyan} %B%F{black}< %B%F{yellow}${git_branch}${git_diff}%B%F{black} >%b%f"
 	fi
 
