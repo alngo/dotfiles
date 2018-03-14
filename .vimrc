@@ -1,10 +1,10 @@
 syntax on
 set autoindent
 
-"Encoding standard
+""Encoding standard
 "scriptencoding utf-8
 "set encoding=utf-8
-"
+
 ""Set some feature
 syntax on
 set autoindent
