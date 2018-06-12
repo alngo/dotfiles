@@ -1,9 +1,56 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim-Plug
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ale_emit_conflict_warnings = 0
+" Install vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+  Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+  Plug 'pangloss/vim-javascript'
+  Plug 'mxw/vim-jsx'
+  Plug 'mattn/emmet-vim'
+  Plug 'w0rp/ale'
+  Plug 'vim-syntastic/syntastic'
+call plug#end()
+
+" Ale configuration
+let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
+" Emmet plugin
+let g:user_emmet_leader_key='<Tab>'
+let g:user_emmet_settings = {
+  \  'javascript.jsx' : {
+    \      'extends' : 'jsx',
+    \  },
+  \}
+" Start autocompletion after 4 chars
+let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_min_num_identifier_candidate_chars = 4
+let g:ycm_enable_diagnostic_highlighting = 0
+" Don't show YCM's preview window
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+
 syntax on
 set autoindent
 
-""Encoding standard
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+"Encoding standard
 "scriptencoding utf-8
 "set encoding=utf-8
+
+"Set path recursive
+set path+=**
 
 ""Set some feature
 syntax on
@@ -52,10 +99,38 @@ nnoremap ti  :args Makefile include/*.h<CR>
 nnoremap ta  :tab all<CR>
 
 "Panes manipulation
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+nnoremap <S-j> <C-W><C-J>
+nnoremap <S-k> <C-W><C-K>
+nnoremap <S-l> <C-W><C-L>
+nnoremap <S-h> <C-W><C-H>
 
 "Reload
 nnoremap rr	:edit<CR>
+"Plugin for web
+let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx"
+
+augroup templates
+  au!
+  autocmd BufNewFile *.* silent! execute '0r ~/.vim/templates/skeleton.'.expand("<afile>:e")
+augroup END
+"React skeleton
+func! SubFileName()
+  let filename = expand('%')
+  let filename = substitute(filename, "\.js", "", "")
+  %s/FILENAME/\=filename/g
+endfunction
+
+"Nerdtree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+"Skeleton
+:command Component :0r ~/.vim/templates/skeleton/reactComponent.js | :silent call SubFileName()
+set backspace=indent,eol,start
+:set mouse=a
+
+"Search file
+if exists("$PROJECTDIR")
+  set path=$PROJECTDIR/**
+  set tags=$PROJECTDIR/tags
+endif
