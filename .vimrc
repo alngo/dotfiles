@@ -11,18 +11,14 @@ set mouse=a
 
 " Set backspace
 set backspace=indent,eol,start
+set path=$PWD/**
 
-" Set path
-set path+=**
-
-" Set some feature and Color
-color despacio
+" Set some feature
 syntax on
 set autoindent
 set autoread
 set number
 set showmatch
-set autochdir
 
 " No Error Bell
 set noerrorbells
@@ -42,7 +38,15 @@ autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
 
-" Bracket AutoClose
+color despacio
+set nu
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smarttab
+set hlsearch
+
+" Bracket
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O
 inoremap {{     {
@@ -69,6 +73,7 @@ nnoremap tj  :tabnext<CR>
 nnoremap tk  :tabprev<CR>
 nnoremap tl  :tablast<CR>
 nnoremap tt  :tabedit<Space>
+nnoremap ttl :tabedit<Space>**/*
 nnoremap tn  :tabnext<Space>
 nnoremap tm  :tabm<Space>
 nnoremap ta  :tab all<CR>
@@ -97,6 +102,9 @@ let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
+" CloseTag
+let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx"
+
 " Show file options above the command line
 set wildmenu
 
@@ -106,6 +114,7 @@ set wildignore+=*.pdf,*.psd
 set wildignore+=node_modules/*,bower_components/*
 
 " netrw config
+" Toggle Vexplore with Ctrl-E
 function! ToggleVExplorer()
   if exists("t:expl_buf_num")
       let expl_win_num = bufwinnr(t:expl_buf_num)
@@ -155,13 +164,23 @@ vnoremap <silent> * :<C-U>
   \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-
-" VIM PLUGIN AND EXTENSION
+" Console.log Configuration
+" Console log from insert mode; Puts focus inside parentheses
+imap cll console.log();<Esc>==f(a
+" Console log from visual mode on next line, puts visual selection inside parentheses
+vmap cll yocll<Esc>p
+" Console log from normal mode, inserted on next line with word your on inside parentheses
+nmap cll yiwocll<Esc>p
 
 " Pathogen()
 execute pathogen#infect()
 
 " Plug()
 call plug#begin('~/.vim/plugged')
+
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'vim-syntastic/syntastic'
+Plug 'mattn/emmet-vim'
 
 call plug#end()
