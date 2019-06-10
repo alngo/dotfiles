@@ -1,61 +1,33 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim-Plug
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Encoding standard
-set encoding=utf-8
-set mouse=a
+set nocompatible
+filetype indent plugin on
+syntax on
+set hidden
+set wildmenu
+set showcmd
+set sol
+set hlsearch
+set ignorecase
+set smartcase
 set backspace=indent,eol,start
-set path=.,$PWD/**,,**/**
 set autoindent
-set autoread
+set ruler
+set laststatus=2
+set confirm
+set visualbell
+set mouse=a
 set number
-set showmatch
-set relativenumber
-set noerrorbells
-set novisualbell
-set tm=500
-set nu
 set tabstop=2
 set shiftwidth=2
-set expandtab
-set smarttab
-set hlsearch
-syntax on
-color despacio
-
-" calculator
-ino <C-A> <C-O>yiW<End><C-O>viWd<End><C-R>=<C-R>0<CR>
-
-" Custom Command
-command! -nargs=+ R call R(<f-args>)
-command! -nargs=+ Sub call Sub(<f-args>)
-
-function! Sub( ... )
-  if a:0 != 2
-    echo "Need two arguments"
-    return
-  endif
-  execute "%substitute/" . a:1 . "/" . a:2 . "/g"
-endfunction
-
-function! R( ... )
-    if a:0 != 2
-        echo "Need two arguments"
-        return
-    endif
-    execute "0r ~/.vim/templates/" . a:1
-    execute "%substitute/\$SUB/" . a:2 . "/g"
-endfunction
-
-" Set Marker on file
+set softtabstop=2
+set noexpandtab
+map Y y$
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")| exe "normal! g'\"" | endif
 
 " Delete Trailing White Space
 func! DeleteTrailingWS()
-	exe "normal mz"
-	%s/\s\+$//ge
-	exe "normal `z"
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
 endfunc
 
 autocmd BufWrite *.c :call DeleteTrailingWS()
@@ -103,15 +75,10 @@ nnoremap ttl :tabedit<Space>**/*
 nnoremap tn  :tabnext<Space>
 nnoremap tm  :tabm<Space>
 nnoremap ta  :tab all<CR>
+nnoremap ee  :e<Space>**/*
 
 " AutoQuit Insert Mode
 imap jk  <Esc>
-
-" Quickfix list
-nnoremap cn   :cn<CR>
-nnoremap cp   :cp<CR>
-nnoremap cc   :ccl<CR>
-nnoremap co   :copen<CR>
 
 " Line manipulation
 nnoremap <C-j> :m .+1<CR>==
@@ -132,126 +99,76 @@ let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-" CloseTag
-let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx"
-
-" Show file options above the command line
-set wildmenu
-
 " Don't offer to open certain files/directories
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
 set wildignore+=*.pdf,*.psd
-set wildignore+=node_modules/*,bower_components/*
+set wildignore+=node_modules/*,bower_components/*,**/node_modules/**
 
-" netrw config
-" Toggle Vexplore with Ctrl-E
-function! ToggleVExplorer()
-	if exists("t:expl_buf_num")
-		let expl_win_num = bufwinnr(t:expl_buf_num)
-		if expl_win_num != -1
-			let cur_win_nr = winnr()
-			exec expl_win_num . 'wincmd w'
-			close
-			exec cur_win_nr . 'wincmd w'
-			unlet t:expl_buf_num
-		else
-			unlet t:expl_buf_num
-		endif
-	else
-		exec '1wincmd w'
-		Vexplore
-		let t:expl_buf_num = bufnr("%")
-	endif
-endfunction
-map <silent> <C-E> :call ToggleVExplorer()<CR>
-let g:netrw_banner = 0
-let g:netrw_browse_split = 3
-let g:netrw_altv = 1
-let g:netrw_winsize = 15
-augroup ProjectDrawer
-	autocmd!
-	autocmd VimEnter * :Vexplore
-augroup END
+" Console.log
+imap cll console.log();<Esc>==f(a
+vmap cll yocll<Esc>p
+nmap cll yiwocll<Esc>p
 
 " Highlight Configuration
 let g:highlighting = 0
 function! Highlighting()
-	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
-		let g:highlighting = 0
-		return ":silent nohlsearch\<CR>"
-	endif
-	let @/ = '\<'.expand('<cword>').'\>'
-	let g:highlighting = 1
-	return ":silent set hlsearch\<CR>"
+    if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
+        let g:highlighting = 0
+        return ":silent nohlsearch\<CR>"
+    endif
+    let @/ = '\<'.expand('<cword>').'\>'
+    let g:highlighting = 1
+    return ":silent set hlsearch\<CR>"
 endfunction
 nnoremap <silent> <expr> <CR> Highlighting()
 
 " Search Configuration
 vnoremap <silent> * :<C-U>
-			\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-			\gvy/<C-R><C-R>=substitute(
-			\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-			\gV:call setreg('"', old_reg, old_regtype)<CR>
+            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+            \gvy/<C-R><C-R>=substitute(
+            \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+            \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-" Console.log Configuration
-" Console log from insert mode; Puts focus inside parentheses
-imap cll console.log();<Esc>==f(a
-" Console log from visual mode on next line, puts visual selection inside parentheses
-vmap cll yocll<Esc>p
-" Console log from normal mode, inserted on next line with word your on inside parentheses
-nmap cll yiwocll<Esc>p
-
-" Pathogen()
-execute pathogen#infect()
-
-" Plug()
 call plug#begin('~/.vim/plugged')
 
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'gregsexton/matchtag'
 Plug 'vim-syntastic/syntastic'
-Plug 'metakirby5/codi.vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'neomake/neomake', { 'on': 'Neomake' }
-Plug 'ludovicchabant/vim-gutentags'
-
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'alvan/vim-closetag'
 if has('nvim')
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-	Plug 'Shougo/deoplete.nvim'
-	Plug 'roxma/nvim-yarp'
-	Plug 'roxma/vim-hug-neovim-rpc'
-	Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-	Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup = 1
 
 call plug#end()
 
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_refresh_always = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
-let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
+" Deoplete
+inoremap <expr> <S-n>		pumvisible()	? "\<C-n>" : "\<S-n>"
+inoremap <expr> <S-p>		pumvisible()	? "\<C-p>" : "\<S-p>"
 
-" deoplete tab completion
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" vim-fugitive
+set diffopt+=vertical
+let mapleader = ' '
+set statusline =
+set statusline +=[%n]
+set statusline +=%f\ %h%m%r%w
+set statusline +=%y                                                  
+set statusline +=\ %{fugitive#statusline()}
+set statusline +=\ %{strftime(\"[%d/%m/%y\ %T]\",getftime(expand(\"%:p\")))} 
+set statusline +=%=%-10L
+set statusline +=%=%-14.(%l,%c%V%)\ %P
 
-let g:tern_request_timeout = 1
-let g:tern_request_timeout = 6000
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
-let g:deoplete#sources#tss#javascript_support = 1
+" Syntastic
+let g:syntastic_javascript_checkers = ['standard']
+let g:syntastic_javascript_standard_exec = 'happiness'
+let g:syntastic_javascript_standard_generic = 1
 
-autocmd! BufWritePost * Neomake
-let g:neomake_warning_sign = {
-			\ 'text': '?',
-			\ 'texthl': 'WarningMsg',
-			\ }
-
-let g:neomake_error_sign = {
-			\ 'text': 'X',
-			\ 'texthl': 'ErrorMsg',
-			\ }
+" CloseTag
+let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx"
