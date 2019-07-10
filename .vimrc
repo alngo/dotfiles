@@ -1,6 +1,9 @@
 set nocompatible
+set encoding=utf-8
+set fileencoding=utf-8
 filetype indent plugin on
 syntax on
+"color despacio
 set hidden
 set wildmenu
 set showcmd
@@ -13,15 +16,37 @@ set autoindent
 set ruler
 set laststatus=2
 set confirm
-set visualbell
+set noerrorbells
+set novisualbell
 set mouse=a
 set number
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set noexpandtab
 map Y y$
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")| exe "normal! g'\"" | endif
+
+set path+=**                                                                    
+set wildignore+=**/node_modules/
+
+" for htlm/css/js files, 2 spaces
+autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
+
+" Buffer
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
+" vimdiff
+highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
+highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
+highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
 " Delete Trailing White Space
 func! DeleteTrailingWS()
@@ -66,21 +91,26 @@ inoremap ``     `
 inoremap ``     ``
 
 " Tab manipulation
-nnoremap th  :tabfirst<CR>
-nnoremap tj  :tabnext<CR>
-nnoremap tk  :tabprev<CR>
-nnoremap tl  :tablast<CR>
-nnoremap tt  :tabedit<Space>
-nnoremap ttl :tabedit<Space>**/*
-nnoremap tn  :tabnext<Space>
-nnoremap tm  :tabm<Space>
-nnoremap ta  :tab all<CR>
-nnoremap ee  :e<Space>**/*
+nnoremap ‚Äô  :tabnext<CR>
+nnoremap ‚Äù  :tabprev<CR>
+nnoremap ‚Ä†  :tabedit<Space>
+nnoremap Àá  :tabedit<Space>**/*
+nnoremap √•  :tab all<CR>
+nnoremap √ò	:e<Space>**/*
+nnoremap √∏  :e<Space>
 
-" AutoQuit Insert Mode
-imap jk  <Esc>
+" Pane manipulation
+inoremap √ì <C-\><C-N><C-w>h
+inoremap √î <C-\><C-N><C-w>j
+inoremap Ô£ø <C-\><C-N><C-w>k
+inoremap √í <C-\><C-N><C-w>l
 
-" Line manipulation
+nnoremap √ì <C-w>h
+nnoremap √î <C-w>j
+nnoremap Ô£ø <C-w>k
+nnoremap √í <C-w>l
+
+"" Line manipulation
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
 inoremap <C-j> <Esc>:m .+1<CR>==gi
@@ -88,11 +118,9 @@ inoremap <C-k> <Esc>:m .-2<CR>==gi
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
-" Panes manipulation
-nnoremap <S-j> <C-W><C-J>
-nnoremap <S-k> <C-W><C-K>
-nnoremap <S-l> <C-W><C-L>
-nnoremap <S-h> <C-W><C-H>
+" quickfix list
+nnoremap ‚àÜ :cn<CR>
+nnoremap Àö :cp<CR>
 
 "Cursor Shape
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -138,6 +166,9 @@ Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'alvan/vim-closetag'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'majutsushi/tagbar'
+Plug 'ludovicchabant/vim-gutentags'
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -145,17 +176,33 @@ else
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
+
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+
+" Tagbar
+nmap <S-t> :TagbarToggle<CR>
+
 let g:deoplete#enable_at_startup = 1
 
 call plug#end()
 
+" Python-mode
+let g:pymode_python = 'python3'
+
 " Deoplete
-inoremap <expr> <S-n>		pumvisible()	? "\<C-n>" : "\<S-n>"
-inoremap <expr> <S-p>		pumvisible()	? "\<C-p>" : "\<S-p>"
+inoremap <expr> <Tab>		pumvisible()    ? "\<C-n>" : "<Tab>"
+let g:python_host_prog  = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+" Mac alt mapping
+tnoremap √ì <C-\><C-N><C-w>h 
+tnoremap √î <C-\><C-N><C-w>j
+tnoremap Ô£ø <C-\><C-N><C-w>k
+tnoremap √í <C-\><C-N><C-w>l
 
 " vim-fugitive
-set diffopt+=vertical
 let mapleader = ' '
+set diffopt+=vertical
 set statusline =
 set statusline +=[%n]
 set statusline +=%f\ %h%m%r%w
