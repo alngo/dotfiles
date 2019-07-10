@@ -91,24 +91,24 @@ inoremap ``     `
 inoremap ``     ``
 
 " Tab manipulation
-nnoremap ‚Äô  :tabnext<CR>
-nnoremap ‚Äù  :tabprev<CR>
-nnoremap ‚Ä†  :tabedit<Space>
-nnoremap Àá  :tabedit<Space>**/*
-nnoremap √•  :tab all<CR>
-nnoremap √ò	:e<Space>**/*
-nnoremap √∏  :e<Space>
+nnoremap ’  :tabnext<CR>
+nnoremap ”  :tabprev<CR>
+nnoremap †  :tabedit<Space>
+nnoremap ˇ  :tabedit<Space>**/*
+nnoremap å  :tab all<CR>
+nnoremap Ø	:e<Space>**/*
+nnoremap ø  :e<Space>
 
 " Pane manipulation
-inoremap √ì <C-\><C-N><C-w>h
-inoremap √î <C-\><C-N><C-w>j
-inoremap Ô£ø <C-\><C-N><C-w>k
-inoremap √í <C-\><C-N><C-w>l
+inoremap Ó <C-\><C-N><C-w>h
+inoremap Ô <C-\><C-N><C-w>j
+inoremap  <C-\><C-N><C-w>k
+inoremap Ò <C-\><C-N><C-w>l
 
-nnoremap √ì <C-w>h
-nnoremap √î <C-w>j
-nnoremap Ô£ø <C-w>k
-nnoremap √í <C-w>l
+nnoremap Ó <C-w>h
+nnoremap Ô <C-w>j
+nnoremap  <C-w>k
+nnoremap Ò <C-w>l
 
 "" Line manipulation
 nnoremap <C-j> :m .+1<CR>==
@@ -119,8 +119,8 @@ vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
 " quickfix list
-nnoremap ‚àÜ :cn<CR>
-nnoremap Àö :cp<CR>
+nnoremap ∆ :cn<CR>
+nnoremap ˚ :cp<CR>
 
 "Cursor Shape
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -195,10 +195,10 @@ inoremap <expr> <Tab>		pumvisible()    ? "\<C-n>" : "<Tab>"
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 " Mac alt mapping
-tnoremap √ì <C-\><C-N><C-w>h 
-tnoremap √î <C-\><C-N><C-w>j
-tnoremap Ô£ø <C-\><C-N><C-w>k
-tnoremap √í <C-\><C-N><C-w>l
+tnoremap Ó <C-\><C-N><C-w>h 
+tnoremap Ô <C-\><C-N><C-w>j
+tnoremap  <C-\><C-N><C-w>k
+tnoremap Ò <C-\><C-N><C-w>l
 
 " vim-fugitive
 let mapleader = ' '
