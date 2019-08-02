@@ -28,13 +28,12 @@ set noexpandtab
 set path+=**                                                                    
 " Statusline
 set statusline =
-set statusline +=[%n]
-set statusline +=%f\ %h%m%r%w
-set statusline +=%y                                                  
-set statusline +=\ %{fugitive#statusline()}
-set statusline +=\ %{strftime(\"[%d/%m/%y\ %T]\",getftime(expand(\"%:p\")))} 
-set statusline +=%=%-10L
-set statusline +=%=%-14.(%l,%c%V%)\ %P
+set statusline +=%#LineNr#
+set statusline +=\ %f
+set statusline +=%=
+set statusline +=%#CursorColumn#
+set statusline +=\ %p%%
+set statusline +=\ %l:%c
 " Don't offer to open certain files/directories
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap
 set wildignore+=*.pdf,*.psd
@@ -69,7 +68,7 @@ inoremap Ó <C-\><C-N><C-w>h
 inoremap Ô <C-\><C-N><C-w>j
 inoremap  <C-\><C-N><C-w>k
 inoremap Ò <C-\><C-N><C-w>l
-tnoremap Ó <C-\><C-N><C-w>h
+tnoremap Ó <C-\><C-N><C-w>h 
 tnoremap Ô <C-\><C-N><C-w>j
 tnoremap  <C-\><C-N><C-w>k
 tnoremap Ò <C-\><C-N><C-w>l
@@ -178,7 +177,6 @@ let g:deoplete#enable_at_startup = 1
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 " vim-fugitive
-let mapleader = ' '
 set diffopt+=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
