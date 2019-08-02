@@ -69,6 +69,10 @@ inoremap Ó <C-\><C-N><C-w>h
 inoremap Ô <C-\><C-N><C-w>j
 inoremap  <C-\><C-N><C-w>k
 inoremap Ò <C-\><C-N><C-w>l
+tnoremap Ó <C-\><C-N><C-w>h
+tnoremap Ô <C-\><C-N><C-w>j
+tnoremap  <C-\><C-N><C-w>k
+tnoremap Ò <C-\><C-N><C-w>l
 nnoremap Ó <C-w>h
 nnoremap Ô <C-w>j
 nnoremap  <C-w>k
