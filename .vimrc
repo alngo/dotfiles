@@ -3,7 +3,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 filetype indent plugin on
 syntax on
-"color despacio
+color despacio
 set hidden
 set wildmenu
 set showcmd
@@ -26,9 +26,7 @@ set softtabstop=4
 set noexpandtab
 map Y y$
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")| exe "normal! g'\"" | endif
-
 set path+=**                                                                    
-set wildignore+=**/node_modules/
 
 " for htlm/css/js files, 2 spaces
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
@@ -50,9 +48,9 @@ highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Re
 
 " Delete Trailing White Space
 func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
+	exe "normal mz"
+	%s/\s\+$//ge
+	exe "normal `z"
 endfunc
 
 autocmd BufWrite *.c :call DeleteTrailingWS()
@@ -60,55 +58,44 @@ autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
 
 " Bracket
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-
-inoremap [      []<Left>
-inoremap [<CR>  [<CR>]<Esc>O
-inoremap [[     [
-inoremap []     []
-
-inoremap (      ()<Left>
-inoremap (<CR>  (<CR>)<Esc>O
-inoremap ((     (
-inoremap ()     ()
-
-inoremap "      ""<Left>
-inoremap "<CR>  "<CR>"<Esc>O
-inoremap ""     "
-inoremap ""     ""
-
-inoremap '      ''<Left>
-inoremap '<CR>  '<CR>'<Esc>O
-inoremap ''     '
-inoremap ''     ''
-
-inoremap `      ``<Left>
-inoremap `<CR>  `<CR>`<Esc>O
-inoremap ``     `
-inoremap ``     ``
+function! ConditionalPairMap(open, close)
+	let line = getline('.')
+	let col = col('.')
+	if col < col('$') || stridx(line, a:close, col + 1) != -1
+		return a:open
+	else
+		return a:open . a:close . repeat("\<left>", len(a:close))
+	endif
+endf
+inoremap <expr> ( ConditionalPairMap('(', ')')
+inoremap <expr> { ConditionalPairMap('{', '}')
+inoremap <expr> [ ConditionalPairMap('[', ']')
+inoremap <expr> " ConditionalPairMap('"', '"')
+inoremap <expr> ' ConditionalPairMap("'", "'")
+inoremap <expr> ` ConditionalPairMap('`', '`')
 
 " Tab manipulation
-nnoremap ’  :tabnext<CR>
-nnoremap ”  :tabprev<CR>
-nnoremap †  :tabedit<Space>
-nnoremap ˇ  :tabedit<Space>**/*
-nnoremap å  :tab all<CR>
-nnoremap Ø	:e<Space>**/*
-nnoremap ø  :e<Space>
+nnoremap ‚Äô  :tabnext<CR>
+nnoremap ‚Äù  :tabprev<CR>
+nnoremap ‚Ä†  :tabedit<Space>
+nnoremap Àá  :tabedit<Space>**/*
+nnoremap √•  :tab all<CR>
+nnoremap √ò	:e<Space>**/*
+nnoremap √∏  :e<Space>
 
 " Pane manipulation
-inoremap Ó <C-\><C-N><C-w>h
-inoremap Ô <C-\><C-N><C-w>j
-inoremap  <C-\><C-N><C-w>k
-inoremap Ò <C-\><C-N><C-w>l
+inoremap √ì <C-\><C-N><C-w>h
+inoremap √î <C-\><C-N><C-w>j
+inoremap Ô£ø <C-\><C-N><C-w>k
+inoremap √í <C-\><C-N><C-w>l
 
-nnoremap Ó <C-w>h
-nnoremap Ô <C-w>j
-nnoremap  <C-w>k
-nnoremap Ò <C-w>l
+nnoremap √ì <C-w>h
+nnoremap √î <C-w>j
+nnoremap Ô£ø <C-w>k
+nnoremap √í <C-w>l
+
+" argmuments
+nnoremap √Ö :args<Space>**/*
 
 "" Line manipulation
 nnoremap <C-j> :m .+1<CR>==
@@ -119,8 +106,8 @@ vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
 
 " quickfix list
-nnoremap ∆ :cn<CR>
-nnoremap ˚ :cp<CR>
+nnoremap ‚àÜ :cn<CR>
+nnoremap Àö :cp<CR>
 
 "Cursor Shape
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -128,9 +115,10 @@ let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " Don't offer to open certain files/directories
-set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap
 set wildignore+=*.pdf,*.psd
-set wildignore+=node_modules/*,bower_components/*,**/node_modules/**
+set wildignore+=**/node_modules/*,bower_components/*,**/node_modules/**
+set wildignore+=**/node_modules/
 
 " Console.log
 imap cll console.log();<Esc>==f(a
@@ -140,65 +128,78 @@ nmap cll yiwocll<Esc>p
 " Highlight Configuration
 let g:highlighting = 0
 function! Highlighting()
-    if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
-        let g:highlighting = 0
-        return ":silent nohlsearch\<CR>"
-    endif
-    let @/ = '\<'.expand('<cword>').'\>'
-    let g:highlighting = 1
-    return ":silent set hlsearch\<CR>"
+	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
+		let g:highlighting = 0
+		return ":silent nohlsearch\<CR>"
+	endif
+	let @/ = '\<'.expand('<cword>').'\>'
+	let g:highlighting = 1
+	return ":silent set hlsearch\<CR>"
 endfunction
 nnoremap <silent> <expr> <CR> Highlighting()
 
 " Search Configuration
 vnoremap <silent> * :<C-U>
-            \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-            \gvy/<C-R><C-R>=substitute(
-            \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-            \gV:call setreg('"', old_reg, old_regtype)<CR>
+			\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+			\gvy/<C-R><C-R>=substitute(
+			\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+			\gV:call setreg('"', old_reg, old_regtype)<CR>
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'gregsexton/matchtag'
 Plug 'vim-syntastic/syntastic'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
+Plug 'pangloss/vim-javascript'
+Plug 'gregsexton/matchtag'
 Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'w0rp/ale'
+
 if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
+	Plug 'zxqfl/tabnine-vim'
+	Plug 'Shougo/deoplete.nvim'
+	Plug 'roxma/nvim-yarp'
+	Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+call plug#end()
+
+" ale color
+let g:ale_set_highlights = 1 " Disable highligting
+
+highlight ALEError ctermbg=94 cterm=underline 
+highlight ALEWarning ctermbg=95 cterm=underline
 
 " Tagbar
 nmap <S-t> :TagbarToggle<CR>
 
 let g:deoplete#enable_at_startup = 1
 
-call plug#end()
-
 " Python-mode
 let g:pymode_python = 'python3'
+
+" TabNine
+call deoplete#custom#var('tabnine', {
+			\ 'line_limit': 500,
+			\ 'max_num_results': 20,
+			\ })
 
 " Deoplete
 inoremap <expr> <Tab>		pumvisible()    ? "\<C-n>" : "<Tab>"
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
+
 " Mac alt mapping
-tnoremap Ó <C-\><C-N><C-w>h 
-tnoremap Ô <C-\><C-N><C-w>j
-tnoremap  <C-\><C-N><C-w>k
-tnoremap Ò <C-\><C-N><C-w>l
+tnoremap √ì <C-\><C-N><C-w>h 
+tnoremap √î <C-\><C-N><C-w>j
+tnoremap Ô£ø <C-\><C-N><C-w>k
+tnoremap √í <C-\><C-N><C-w>l
 
 " vim-fugitive
 let mapleader = ' '
@@ -218,4 +219,4 @@ let g:syntastic_javascript_standard_exec = 'happiness'
 let g:syntastic_javascript_standard_generic = 1
 
 " CloseTag
-let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx"
+let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx,*.tsx"
