@@ -139,6 +139,7 @@ nnoremap Y y$
 " Plugins
 call plug#begin('~/.vim/plugged')
 Plug 'vim-syntastic/syntastic'
+Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'gregsexton/matchtag'
 Plug 'alvan/vim-closetag'
