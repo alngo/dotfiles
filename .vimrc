@@ -173,11 +173,6 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "<Tab>"
 let g:deoplete#enable_at_startup = 1
 let g:python_host_prog  = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
-" Mac alt mapping
-tnoremap Ó <C-\><C-N><C-w>h 
-tnoremap Ô <C-\><C-N><C-w>j
-tnoremap  <C-\><C-N><C-w>k
-tnoremap Ò <C-\><C-N><C-w>l
 " vim-fugitive
 let mapleader = ' '
 set diffopt+=vertical
