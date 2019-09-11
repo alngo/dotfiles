@@ -99,11 +99,12 @@ vnoremap <silent> * :<C-U>
 	\gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " Plug
-call plug#begin(~/.vim/plugged)
+call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
-Plug 'ludovicchabant/vim-gutentag'
-call plug#end
+Plug 'vim-scripts/taglist.vim'
+Plug 'ludovicchabant/vim-gutentags'
+call plug#end()
