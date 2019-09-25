@@ -18,6 +18,7 @@ setglobal display=lastline
 setglobal scrolloff=2
 setglobal cmdheight=2
 set number
+set hlsearch
 
 " Cursor shape
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -63,7 +64,7 @@ nnoremap ”  :tabprev<CR>
 nnoremap †  :tabedit<Space>
 nnoremap ˇ  :tabedit<Space>**/*
 nnoremap å  :tab all<CR>
-nnoremap Ø	:e<Space>**/*
+nnoremap Ø  :e<Space>**/*
 nnoremap ø  :e<Space>
 " Pane manipulation
 inoremap Ó <C-\><C-N><C-w>h
@@ -86,6 +87,14 @@ setglobal wildmode=full
 setglobal wildignore+=tags,.*pyc,*.o,*.d
 
 " Function
+func! Test()
+	if filereadable("test.sh")
+		:silent exe "!./test.sh | cat > /tmp/" . $USER
+	endif
+endfunc
+autocmd BufWrite *.c :call Test()
+autocmd BufWrite *.h :call Test()
+
 func! DeleteTrailingWS()
 	exe "normal mz"
 	%s/\s\+$//ge
@@ -94,6 +103,7 @@ endfunc
 autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
+
 let g:highlighting = 0
 function! Highlighting()
 	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
@@ -111,9 +121,10 @@ vnoremap <silent> * :<C-U>
 	\gvy/<C-R><C-R>=substitute(
 	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
 	\gV:call setreg('"', old_reg, old_regtype)<CR>
+	
 function! PairMap(open, close)
 	return a:open . a:close . repeat("\<left>", len(a:close))
-endf
+endfunc
 inoremap <expr> ( PairMap('(', ')')
 inoremap <expr> { PairMap('{', '}')
 inoremap <expr> [ PairMap('[', ']')
