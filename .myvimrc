@@ -11,10 +11,6 @@ setglobal path=.,,
 setglobal tags=./tags
 setglobal encoding=utf-8
 setglobal fileencoding=utf-8
-if exists('+macmeta')
-	setglobal macmeta
-endif
-setglobal winaltkeys=no
 
 " Display
 setglobal lazyredraw
@@ -40,6 +36,7 @@ setglobal shiftround
 setglobal autoindent
 setglobal omnifunc=syntaxcomplete#Complete
 setglobal completefunc=syntaxcomplete#Complete
+set colorcolumn=80
 
 " Folding - Comment
 if has('folding')
@@ -55,21 +52,38 @@ autocmd FileType c,cpp,cs,java,js        setlocal commentstring=//\ %s
 " Information
 setglobal confirm
 setglobal showcmd
-setglobal visualbell
+setglobal novisualbell
 
 " Mapping
 nnoremap Y y
 inoremap <C-C> <Esc>`^
-inoremap <M-o>      <C-O>o
-inoremap <M-O>      <C-O>O
-inoremap <M-I>      <C-O>^
-inoremap <M-A>      <C-O>$
+" Tab manipulation
+nnoremap ’  :tabnext<CR>
+nnoremap ”  :tabprev<CR>
+nnoremap †  :tabedit<Space>
+nnoremap ˇ  :tabedit<Space>**/*
+nnoremap å  :tab all<CR>
+nnoremap Ø	:e<Space>**/*
+nnoremap ø  :e<Space>
+" Pane manipulation
+inoremap Ó <C-\><C-N><C-w>h
+inoremap Ô <C-\><C-N><C-w>j
+inoremap  <C-\><C-N><C-w>k
+inoremap Ò <C-\><C-N><C-w>l
+nnoremap Ó <C-w>h
+nnoremap Ô <C-w>j
+nnoremap  <C-w>k
+nnoremap Ò <C-w>l
+tnoremap Ó <C-\><C-N><C-w>h 
+tnoremap Ô <C-\><C-N><C-w>j
+tnoremap  <C-\><C-N><C-w>k
+tnoremap Ò <C-\><C-N><C-w>l
 
 " Wildmenu
 setglobal history=200
 setglobal wildmenu
 setglobal wildmode=full
-setglobal wildignore+=tags,.*pyc,*.o
+setglobal wildignore+=tags,.*pyc,*.o,*.d
 
 " Function
 func! DeleteTrailingWS()
@@ -97,6 +111,15 @@ vnoremap <silent> * :<C-U>
 	\gvy/<C-R><C-R>=substitute(
 	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
 	\gV:call setreg('"', old_reg, old_regtype)<CR>
+function! PairMap(open, close)
+	return a:open . a:close . repeat("\<left>", len(a:close))
+endf
+inoremap <expr> ( PairMap('(', ')')
+inoremap <expr> { PairMap('{', '}')
+inoremap <expr> [ PairMap('[', ']')
+inoremap <expr> " PairMap('"', '"')
+inoremap <expr> ' PairMap("'", "'")
+inoremap <expr> ` PairMap('`', '`')
 
 " Plug
 call plug#begin('~/.vim/plugged')
@@ -106,5 +129,10 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-scripts/taglist.vim'
+Plug 'justinmk/vim-syntax-extra'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'pbondoer/vim-42header'
 call plug#end()
