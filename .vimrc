@@ -1,83 +1,102 @@
-filetype indent plugin on
+" Global
 syntax on
-color despacio
-" Settings
-set nocompatible
-set encoding=utf-8
-set fileencoding=utf-8
-set hidden
-set wildmenu
-set showcmd
-set sol
-set hlsearch
-set ignorecase
-set smartcase
-set backspace=indent,eol,start
-set autoindent
-set ruler
-set laststatus=1
-set confirm
-set noerrorbells
-set novisualbell
-set mouse=a
+filetype plugin indent on
+setglobal mouse=a
+setglobal autoread
+setglobal autowrite
+setglobal smartcase
+setglobal incsearch
+setglobal nocompatible
+setglobal path=.,,
+setglobal tags=./tags
+setglobal encoding=utf-8
+setglobal fileencoding=utf-8
+
+" Display
+setglobal lazyredraw
+setglobal display=lastline
+setglobal scrolloff=2
+setglobal cmdheight=2
 set number
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set noexpandtab
-set path+=**                                                                    
-" Statusline
-set statusline =
-set statusline +=%#LineNr#
-set statusline +=\ %f
-set statusline +=%=
-set statusline +=%#CursorColumn#
-set statusline +=\ %p%%
-set statusline +=\ %l:%c
-" Don't offer to open certain files/directories
-set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap
-set wildignore+=*.pdf,*.psd
-set wildignore+=**/node_modules/*,bower_components/*,**/node_modules/**
-set wildignore+=**/node_modules/
-"Cursor Shape
+set hlsearch
+
+" Cursor shape
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-" AUTOCMD 
-autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$")| exe "normal! g'\"" | endif
-" for htlm/css/js files, 2 spaces
+
+" Editing
+set wildignore=*.o,*.a,*.so,*.pyc,*.swp,.git/,*.class,*/target/*,.idea/
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap,
+set wildignore+=*.pdf,*.psd
+set wildignore+=*.o,*.a,*.pyc,*.d
+set wildignore+=*/node_modules/*
+set wildignore+=*/bower_components/*
+set wildignore+=*/dist/*
+set wildignore+=*/build/*
+set wildignore+=*/tmp/*
+
+setglobal textwidth=78
+setglobal backspace=2
+setglobal complete-=i
+setglobal dictionary+=/usr/share/dict/words
+setglobal infercase
+setglobal showmatch
+setglobal virtualedit=block
+setglobal shiftround
+setglobal autoindent
+setglobal omnifunc=syntaxcomplete#Complete
+setglobal completefunc=syntaxcomplete#Complete
+set colorcolumn=80
+
+" Custom
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
-" Buffer
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
+
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+" Folding - Comment
+if has('folding')
+	setglobal foldmethod=marker
+	setglobal foldopen+=jump
+endif
+setglobal commentstring=#\ %s
+if !get(v:, 'vim_did_enter', !has('vim_starting'))
+	setlocal commentstring<
+endif
+autocmd FileType c,cpp,cs,java,js        setlocal commentstring=//\ %s
+
+" Information
+setglobal confirm
+setglobal showcmd
+setglobal novisualbell
+
+" Mapping
+nnoremap Y y
+inoremap <C-C> <Esc>`^
 " Tab manipulation
 nnoremap ’  :tabnext<CR>
 nnoremap ”  :tabprev<CR>
 nnoremap †  :tabedit<Space>
 nnoremap ˇ  :tabedit<Space>**/*
 nnoremap å  :tab all<CR>
-nnoremap Ø	:e<Space>**/*
-nnoremap ø  :e<Space>
+nnoremap Ø  :e<Space>**/*
 " Pane manipulation
 inoremap Ó <C-\><C-N><C-w>h
 inoremap Ô <C-\><C-N><C-w>j
 inoremap  <C-\><C-N><C-w>k
 inoremap Ò <C-\><C-N><C-w>l
-tnoremap Ó <C-\><C-N><C-w>h 
-tnoremap Ô <C-\><C-N><C-w>j
-tnoremap  <C-\><C-N><C-w>k
-tnoremap Ò <C-\><C-N><C-w>l
 nnoremap Ó <C-w>h
 nnoremap Ô <C-w>j
 nnoremap  <C-w>k
 nnoremap Ò <C-w>l
-" Argmuments
-nnoremap Å :args<Space>**/*
+tnoremap Ó <C-\><C-N><C-w>h 
+tnoremap Ô <C-\><C-N><C-w>j
+tnoremap  <C-\><C-N><C-w>k
+tnoremap Ò <C-\><C-N><C-w>l
 " Line manipulation
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
@@ -85,10 +104,35 @@ inoremap <C-j> <Esc>:m .+1<CR>==gi
 inoremap <C-k> <Esc>:m .-2<CR>==gi
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
+" Buffer manipulation
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+" Pum manipulation
+inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
 " quickfix list
 nnoremap ∆ :cn<CR>
 nnoremap ˚ :cp<CR>
-" Delete Trailing White Space
+
+" Wildmenu
+setglobal history=200
+setglobal wildmenu
+setglobal wildmode=full
+setglobal wildignore+=tags,.*pyc,*.o,*.d
+
+" Function
+func! TestScript()
+	if filereadable("testscript.sh")
+		:!./test.sh > /tmp/$USER 2>&1
+	endif
+endfunc
+autocmd BufWrite *.c :call TestScript()
+autocmd BufWrite *.h :call TestScript()
+
 func! DeleteTrailingWS()
 	exe "normal mz"
 	%s/\s\+$//ge
@@ -97,23 +141,7 @@ endfunc
 autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
-" Bracket
-function! ConditionalPairMap(open, close)
-	let line = getline('.')
-	let col = col('.')
-	if col < col('$') || stridx(line, a:close, col + 1) != -1
-		return a:open
-	else
-		return a:open . a:close . repeat("\<left>", len(a:close))
-	endif
-endf
-inoremap <expr> ( ConditionalPairMap('(', ')')
-inoremap <expr> { ConditionalPairMap('{', '}')
-inoremap <expr> [ ConditionalPairMap('[', ']')
-inoremap <expr> " ConditionalPairMap('"', '"')
-inoremap <expr> ' ConditionalPairMap("'", "'")
-inoremap <expr> ` ConditionalPairMap('`', '`')
-" Highlight Configuration
+
 let g:highlighting = 0
 function! Highlighting()
 	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
@@ -125,67 +153,74 @@ function! Highlighting()
 	return ":silent set hlsearch\<CR>"
 endfunction
 nnoremap <silent> <expr> <CR> Highlighting()
-" Search Configuration
+" Search with *
 vnoremap <silent> * :<C-U>
-			\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-			\gvy/<C-R><C-R>=substitute(
-			\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-			\gV:call setreg('"', old_reg, old_regtype)<CR>
-" Extra
-imap cll console.log();<Esc>==f(a
-vmap cll yocll<Esc>p
-nmap cll yiwocll<Esc>p
-nnoremap Y y$
-" Plugins
+	\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+	\gvy/<C-R><C-R>=substitute(
+	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+	\gV:call setreg('"', old_reg, old_regtype)<CR>
+	
+function! PairMap(open, close)
+	return a:open . a:close . repeat("\<left>", len(a:close))
+endfunc
+inoremap <expr> ( PairMap('(', ')')
+inoremap <expr> { PairMap('{', '}')
+inoremap <expr> [ PairMap('[', ']')
+inoremap <expr> " PairMap('"', '"')
+inoremap <expr> ' PairMap("'", "'")
+inoremap <expr> ` PairMap('`', '`')
+
+" Plug
 call plug#begin('~/.vim/plugged')
-Plug 'vim-syntastic/syntastic'
-Plug 'mxw/vim-jsx'
-Plug 'pangloss/vim-javascript'
-Plug 'gregsexton/matchtag'
-Plug 'alvan/vim-closetag'
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-vinegar'
+Plug 'vim-scripts/taglist.vim'
+Plug 'justinmk/vim-syntax-extra'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'pbondoer/vim-42header'
+" JAVASCRIPT/TYPESCRIPT
+Plug 'vim-syntastic/syntastic'
+Plug 'mxw/vim-jsx'
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'pangloss/vim-javascript'
+Plug 'alvan/vim-closetag'
+Plug 'gregsexton/matchtag'
 Plug 'w0rp/ale'
-if has('nvim')
-	Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-	Plug 'zxqfl/tabnine-vim'
-	Plug 'Shougo/deoplete.nvim'
-	Plug 'roxma/nvim-yarp'
-	Plug 'roxma/vim-hug-neovim-rpc'
-endif
+Plug 'dense-analysis/ale'
+Plug 'leafgarland/typescript-vim'
+Plug 'quramy/tsuquyomi'
+" Plug 'ycm-core/YouCompleteMe'
 call plug#end()
-" ale color
-let g:ale_set_highlights = 1 " Disable highligting
-highlight ALEError ctermbg=94 cterm=underline 
-highlight ALEWarning ctermbg=95 cterm=underline
-" Tagbar
-nnoremap <S-t> :TagbarToggle<CR>
-" Python-mode
-let g:pymode_python = 'python3'
-" TabNine
-call deoplete#custom#var('tabnine', {
-			\ 'line_limit': 500,
-			\ 'max_num_results': 20,
-			\ })
-" Deoplete
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "<Tab>"
-let g:deoplete#enable_at_startup = 1
-let g:python_host_prog  = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
+
+" YouCompleteMe
+if !exists("g:ycm_semantic_triggers")
+  let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers['typescript'] = ['.']
+
 " vim-fugitive
 set diffopt+=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
+
 " Syntastic
 let g:syntastic_javascript_checkers = ['standard']
 let g:syntastic_javascript_standard_exec = 'happiness'
 let g:syntastic_javascript_standard_generic = 1
+
 " CloseTag
 let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx,*.tsx"
+
+" Ale
+let g:ale_set_highlights = 1 " Disable highligting
+let g:ale_completion_enabled = 1
+highlight ALEError ctermbg=94 cterm=underline
+highlight ALEWarning ctermbg=95 cterm=underline
