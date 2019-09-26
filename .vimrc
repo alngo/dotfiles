@@ -128,7 +128,7 @@ setglobal wildignore+=tags,.*pyc,*.o,*.d
 " Function
 func! TestScript()
 	if filereadable("testscript.sh")
-		:!./test.sh > /tmp/$USER 2>&1
+		:!./testscript.sh > /tmp/$USER 2>&1
 	endif
 endfunc
 autocmd BufWrite *.c :call TestScript()
