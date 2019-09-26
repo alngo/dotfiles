@@ -51,6 +51,7 @@ set colorcolumn=80
 
 " Custom
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype typescript setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
@@ -221,6 +222,6 @@ let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx,*.tsx"
 
 " Ale
 let g:ale_set_highlights = 1 " Disable highligting
-let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 0
 highlight ALEError ctermbg=94 cterm=underline
 highlight ALEWarning ctermbg=95 cterm=underline
