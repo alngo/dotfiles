@@ -56,9 +56,9 @@ autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
 
-set foldenable
-set foldlevelstart=10
-set foldnestmax=10
+setglobal foldenable
+setglobal foldlevelstart=10
+setglobal foldnestmax=10
 " Folding - Comment
 if has('folding')
 	setglobal foldmethod=marker
@@ -94,10 +94,10 @@ nnoremap Ó <C-w>h
 nnoremap Ô <C-w>j
 nnoremap  <C-w>k
 nnoremap Ò <C-w>l
-tnoremap Ó <C-\><C-N><C-w>h 
-tnoremap Ô <C-\><C-N><C-w>j
-tnoremap  <C-\><C-N><C-w>k
-tnoremap Ò <C-\><C-N><C-w>l
+tnoremap Ó <C-w>h 
+tnoremap Ô <C-w>j
+tnoremap  <C-w>k
+tnoremap Ò <C-w>l
 " Line manipulation
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
@@ -171,7 +171,6 @@ inoremap <expr> " PairMap('"', '"')
 inoremap <expr> ' PairMap("'", "'")
 inoremap <expr> ` PairMap('`', '`')
 
-" Plug
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -186,18 +185,28 @@ Plug 'majutsushi/tagbar'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'pbondoer/vim-42header'
 " JAVASCRIPT/TYPESCRIPT
-Plug 'vim-syntastic/syntastic'
-Plug 'mxw/vim-jsx'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'pangloss/vim-javascript'
 Plug 'alvan/vim-closetag'
 Plug 'gregsexton/matchtag'
+
+Plug 'vim-syntastic/syntastic'
+Plug 'pangloss/vim-javascript'
 Plug 'w0rp/ale'
-Plug 'dense-analysis/ale'
+
 Plug 'leafgarland/typescript-vim'
-Plug 'quramy/tsuquyomi'
-" Plug 'ycm-core/YouCompleteMe'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
 call plug#end()
+
+" Netrw
+let g:netrw_liststyle=3
+
+" Vim_jsx_pretty
+let g:vim_jsx_pretty_highlight_close_tag = 1
+
+" Prettier
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
 " YouCompleteMe
 if !exists("g:ycm_semantic_triggers")
@@ -223,5 +232,6 @@ let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx,*.tsx"
 " Ale
 let g:ale_set_highlights = 1 " Disable highligting
 let g:ale_completion_enabled = 0
+let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
 highlight ALEError ctermbg=94 cterm=underline
 highlight ALEWarning ctermbg=95 cterm=underline
