@@ -11,6 +11,9 @@ setglobal path=.,,
 setglobal tags=./tags
 setglobal encoding=utf-8
 setglobal fileencoding=utf-8
+set laststatus=2
+set showtabline=2
+set guioptions-=e
 
 " Display
 setglobal lazyredraw
@@ -56,10 +59,10 @@ autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
 
+" Folding - Comment
 setglobal foldenable
 setglobal foldlevelstart=10
 setglobal foldnestmax=10
-" Folding - Comment
 if has('folding')
 	setglobal foldmethod=marker
 	setglobal foldopen+=jump
@@ -78,6 +81,7 @@ setglobal novisualbell
 " Mapping
 nnoremap Y y
 inoremap <C-C> <Esc>`^
+
 " Tab manipulation
 nnoremap ’  :tabnext<CR>
 nnoremap ”  :tabprev<CR>
@@ -85,19 +89,30 @@ nnoremap †  :tabedit<Space>
 nnoremap ˇ  :tabedit<Space>**/*
 nnoremap å  :tab all<CR>
 nnoremap Ø  :e<Space>**/*
+
+tnoremap ’  <C-w>:tabnext<CR>
+tnoremap ”  <C-w>:tabprev<CR>
+tnoremap †  <C-w>:tabedit<Space>
+tnoremap ˇ  <C-w>:tabedit<Space>**/*
+tnoremap å  <C-w>:tab all<CR>
+tnoremap Ø  <C-w>:e<Space>**/*
+
 " Pane manipulation
 inoremap Ó <C-\><C-N><C-w>h
 inoremap Ô <C-\><C-N><C-w>j
 inoremap  <C-\><C-N><C-w>k
 inoremap Ò <C-\><C-N><C-w>l
+
 nnoremap Ó <C-w>h
 nnoremap Ô <C-w>j
 nnoremap  <C-w>k
 nnoremap Ò <C-w>l
+
 tnoremap Ó <C-w>h 
 tnoremap Ô <C-w>j
 tnoremap  <C-w>k
 tnoremap Ò <C-w>l
+
 " Line manipulation
 nnoremap <C-j> :m .+1<CR>==
 nnoremap <C-k> :m .-2<CR>==
@@ -105,16 +120,19 @@ inoremap <C-j> <Esc>:m .+1<CR>==gi
 inoremap <C-k> <Esc>:m .-2<CR>==gi
 vnoremap <C-j> :m '>+1<CR>gv=gv
 vnoremap <C-k> :m '<-2<CR>gv=gv
+
 " Buffer manipulation
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
+
 " Pum manipulation
 inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+
 " quickfix list
 nnoremap ∆ :cn<CR>
 nnoremap ˚ :cp<CR>
@@ -126,6 +144,7 @@ setglobal wildmode=full
 setglobal wildignore+=tags,.*pyc,*.o,*.d
 
 " Function
+"	Testscript
 func! TestScript()
 	if filereadable("testscript.sh")
 		:!./testscript.sh > /tmp/$USER 2>&1
@@ -134,6 +153,7 @@ endfunc
 autocmd BufWrite *.c :call TestScript()
 autocmd BufWrite *.h :call TestScript()
 
+"	Delete trailing whitespace
 func! DeleteTrailingWS()
 	exe "normal mz"
 	%s/\s\+$//ge
@@ -143,6 +163,7 @@ autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
 
+"	highlighting search
 let g:highlighting = 0
 function! Highlighting()
 	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
@@ -161,6 +182,7 @@ vnoremap <silent> * :<C-U>
 	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
 	\gV:call setreg('"', old_reg, old_regtype)<CR>
 	
+"	Pair map
 function! PairMap(open, close)
 	return a:open . a:close . repeat("\<left>", len(a:close))
 endfunc
@@ -171,28 +193,32 @@ inoremap <expr> " PairMap('"', '"')
 inoremap <expr> ' PairMap("'", "'")
 inoremap <expr> ` PairMap('`', '`')
 
+" Plug
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-flagship'
+
+Plug 'vim-scripts/L9'
 Plug 'vim-scripts/taglist.vim'
+Plug 'vim-scripts/FuzzyFinder'
+Plug 'vim-scripts/AutoTag'
+
 Plug 'justinmk/vim-syntax-extra'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
-Plug 'majutsushi/tagbar'
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'pbondoer/vim-42header'
+
 " JAVASCRIPT/TYPESCRIPT
 Plug 'alvan/vim-closetag'
 Plug 'gregsexton/matchtag'
-
 Plug 'vim-syntastic/syntastic'
 Plug 'pangloss/vim-javascript'
 Plug 'w0rp/ale'
-
 Plug 'leafgarland/typescript-vim'
+Plug 'ianks/vim-tsx'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
@@ -201,18 +227,8 @@ call plug#end()
 " Netrw
 let g:netrw_liststyle=3
 
-" Vim_jsx_pretty
-let g:vim_jsx_pretty_highlight_close_tag = 1
-
-" Prettier
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
-
-" YouCompleteMe
-if !exists("g:ycm_semantic_triggers")
-  let g:ycm_semantic_triggers = {}
-endif
-let g:ycm_semantic_triggers['typescript'] = ['.']
+" Flagship"
+autocmd User Flags call Hoist("buffer", "fugitive#statusline")
 
 " vim-fugitive
 set diffopt+=vertical
@@ -220,6 +236,15 @@ highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Re
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
+
+" JAVASCRIP/TYPESCRIPT
+
+" Vim_jsx_pretty
+let g:vim_jsx_pretty_highlight_close_tag = 1
+
+" Prettier
+let g:prettier#autoformat = 1
+"autocmd BufWritePre *.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 
 " Syntastic
 let g:syntastic_javascript_checkers = ['standard']
