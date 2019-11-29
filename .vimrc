@@ -1,5 +1,9 @@
-" Global
+"============================================================================"
+" GLOBAL SETTINGS
+"============================================================================"
+ 
 syntax on
+colorscheme desert
 filetype plugin indent on
 setglobal mouse=a
 setglobal autoread
@@ -9,26 +13,29 @@ setglobal incsearch
 setglobal nocompatible
 setglobal path=.,,
 setglobal tags=./tags
-setglobal encoding=utf-8
 setglobal fileencoding=utf-8
+setglobal encoding=utf-8
 set laststatus=2
 set showtabline=2
 set guioptions-=e
 
-" Display
+" DISPLAY
+"============================================================================"
 setglobal lazyredraw
 setglobal display=lastline
 setglobal scrolloff=2
-setglobal cmdheight=2
+setglobal cmdheight=1
 set number
 set hlsearch
 
-" Cursor shape
+" CURSOR SHAPE
+"============================================================================"
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_SR = "\<Esc>]50;CursorShape=2\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-" Editing
+" WILD
+"============================================================================"
 set wildignore=*.o,*.a,*.so,*.pyc,*.swp,.git/,*.class,*/target/*,.idea/
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap,
 set wildignore+=*.pdf,*.psd
@@ -38,7 +45,13 @@ set wildignore+=*/bower_components/*
 set wildignore+=*/dist/*
 set wildignore+=*/build/*
 set wildignore+=*/tmp/*
+set wildignore+=tags,.*pyc,*.o,*.d,*.swp
+setglobal wildmenu
+setglobal wildmode=full
 
+" EDITING SETTINGS
+"============================================================================"
+setglobal history=200
 setglobal textwidth=78
 setglobal backspace=2
 setglobal complete-=i
@@ -48,112 +61,112 @@ setglobal showmatch
 setglobal virtualedit=block
 setglobal shiftround
 setglobal autoindent
-setglobal omnifunc=syntaxcomplete#Complete
-setglobal completefunc=syntaxcomplete#Complete
 set colorcolumn=80
 
-" Custom
+" TABULATIONS WIDTH                                                          "
+"============================================================================"
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype typescript setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype json setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype typescriptreact setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
 
-" Folding - Comment
+" FOLDING                                                                    "
+"============================================================================"
 setglobal foldenable
 setglobal foldlevelstart=10
 setglobal foldnestmax=10
-if has('folding')
-	setglobal foldmethod=marker
-	setglobal foldopen+=jump
-endif
+setglobal foldmethod=marker
+setglobal foldopen+=jump
 setglobal commentstring=#\ %s
 if !get(v:, 'vim_did_enter', !has('vim_starting'))
 	setlocal commentstring<
 endif
 autocmd FileType c,cpp,cs,java,js        setlocal commentstring=//\ %s
 
-" Information
+" INFORMATION                                                                "
+"============================================================================"
 setglobal confirm
 setglobal showcmd
 setglobal novisualbell
 
-" Mapping
-nnoremap Y y
-inoremap <C-C> <Esc>`^
+"============================================================================"
+" MAPPING                                                                    "
+"============================================================================"
 
-" Tab manipulation
-nnoremap ’  :tabnext<CR>
-nnoremap ”  :tabprev<CR>
-nnoremap †  :tabedit<Space>
-nnoremap ˇ  :tabedit<Space>**/*
-nnoremap å  :tab all<CR>
-nnoremap Ø  :e<Space>**/*
+" MISC
+"============================================================================"
+nnoremap Y y$
+nnoremap U <C-r>
+autocmd FileType Help noremap <buffer> q :q<cr>
 
-tnoremap ’  <C-w>:tabnext<CR>
-tnoremap ”  <C-w>:tabprev<CR>
-tnoremap †  <C-w>:tabedit<Space>
-tnoremap ˇ  <C-w>:tabedit<Space>**/*
-tnoremap å  <C-w>:tab all<CR>
-tnoremap Ø  <C-w>:e<Space>**/*
+" EDITION
+"============================================================================"
+nnoremap <leader>t 	:tabedit **/*
+nnoremap <leader>e 	:e **/*
 
-" Pane manipulation
-inoremap Ó <C-\><C-N><C-w>h
-inoremap Ô <C-\><C-N><C-w>j
-inoremap  <C-\><C-N><C-w>k
-inoremap Ò <C-\><C-N><C-w>l
+" TABS NAVIGATION
+"============================================================================"
+nnoremap <leader>[ 	:tabprevious<CR>
+nnoremap <leader>] 	:tabnext<CR>
 
-nnoremap Ó <C-w>h
-nnoremap Ô <C-w>j
-nnoremap  <C-w>k
-nnoremap Ò <C-w>l
+" PANES NAVIGATION                                                           "
+"============================================================================"
+inoremap <C-h> <C-\><C-N><C-w>h
+inoremap <C-j> <C-\><C-N><C-w>j
+inoremap <C-k> <C-\><C-N><C-w>k
+inoremap <C-l> <C-\><C-N><C-w>l
 
-tnoremap Ó <C-w>h 
-tnoremap Ô <C-w>j
-tnoremap  <C-w>k
-tnoremap Ò <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
-" Line manipulation
-nnoremap <C-j> :m .+1<CR>==
-nnoremap <C-k> :m .-2<CR>==
-inoremap <C-j> <Esc>:m .+1<CR>==gi
-inoremap <C-k> <Esc>:m .-2<CR>==gi
-vnoremap <C-j> :m '>+1<CR>gv=gv
-vnoremap <C-k> :m '<-2<CR>gv=gv
+tnoremap <C-h> <C-w>h 
+tnoremap <C-j> <C-w>j
+tnoremap <C-k> <C-w>k
+tnoremap <C-l> <C-w>l
 
-" Buffer manipulation
+" BUFFERS NAVIGATION                                                         
+"============================================================================"
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
 
-" Pum manipulation
-inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
-inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+" QUICKFIX NAVIGATION
+"============================================================================"
+nnoremap <leader>n :cn<CR>
+nnoremap <leader>p :cp<CR>
 
-" quickfix list
-nnoremap ∆ :cn<CR>
-nnoremap ˚ :cp<CR>
 
-" Wildmenu
-setglobal history=200
-setglobal wildmenu
-setglobal wildmode=full
-setglobal wildignore+=tags,.*pyc,*.o,*.d
+" PUM MAPPING
+"============================================================================"
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+inoremap <silent><expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
 
-" Function
-"	Testscript
-func! TestScript()
-	if filereadable("testscript.sh")
-		:!./testscript.sh > /tmp/$USER 2>&1
-	endif
-endfunc
-autocmd BufWrite *.c :call TestScript()
-autocmd BufWrite *.h :call TestScript()
+"============================================================================"
+" HELPER FUNCTION
+"============================================================================"
 
-"	Delete trailing whitespace
+" Quickfix filename into args for argdo
+"============================================================================"
+command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
+function! QuickfixFilenames()
+  " Building a hash ensures we get each buffer only once
+  let buffer_numbers = {}
+  for quickfix_item in getqflist()
+    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+  endfor
+  return join(values(buffer_numbers))
+endfunction
+
+" Deleter trailing spave on write
+"============================================================================"
 func! DeleteTrailingWS()
 	exe "normal mz"
 	%s/\s\+$//ge
@@ -163,7 +176,8 @@ autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.js :call DeleteTrailingWS()
 
-"	highlighting search
+" Deleter trailing spave on write
+"============================================================================"
 let g:highlighting = 0
 function! Highlighting()
 	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
@@ -175,26 +189,27 @@ function! Highlighting()
 	return ":silent set hlsearch\<CR>"
 endfunction
 nnoremap <silent> <expr> <CR> Highlighting()
-" Search with *
+
+" AUTOSEARCH SEARCH WITH *
+"============================================================================"
 vnoremap <silent> * :<C-U>
 	\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
 	\gvy/<C-R><C-R>=substitute(
 	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
 	\gV:call setreg('"', old_reg, old_regtype)<CR>
 	
-"	Pair map
-function! PairMap(open, close)
-	return a:open . a:close . repeat("\<left>", len(a:close))
-endfunc
-inoremap <expr> ( PairMap('(', ')')
-inoremap <expr> { PairMap('{', '}')
-inoremap <expr> [ PairMap('[', ']')
-inoremap <expr> " PairMap('"', '"')
-inoremap <expr> ' PairMap("'", "'")
-inoremap <expr> ` PairMap('`', '`')
+"============================================================================"
+" PLUGINS
+"============================================================================"
 
-" Plug
+" PATHOGEN
+"============================================================================"
+execute pathogen#infect()
+
+" PLUG
+"============================================================================"
 call plug#begin('~/.vim/plugged')
+
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
@@ -203,29 +218,27 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-flagship'
 
-Plug 'vim-scripts/L9'
-Plug 'vim-scripts/taglist.vim'
-Plug 'vim-scripts/FuzzyFinder'
-Plug 'vim-scripts/AutoTag'
-
 Plug 'justinmk/vim-syntax-extra'
 Plug 'pbondoer/vim-42header'
 
-" JAVASCRIPT/TYPESCRIPT
-Plug 'alvan/vim-closetag'
-Plug 'gregsexton/matchtag'
-Plug 'vim-syntastic/syntastic'
-Plug 'pangloss/vim-javascript'
-Plug 'w0rp/ale'
-Plug 'leafgarland/typescript-vim'
-Plug 'ianks/vim-tsx'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+" Autocompletion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" NEERDTREE
+Plug 'scrooloose/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" FUZZY SEARCH
+Plug 'ctrlpvim/ctrlp.vim'
+
+" RUST
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
-" Netrw
-let g:netrw_liststyle=3
+"============================================================================"
+" PLUGINS SETTINGS
+"============================================================================"
 
 " Flagship"
 autocmd User Flags call Hoist("buffer", "fugitive#statusline")
@@ -237,26 +250,125 @@ highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
-" JAVASCRIP/TYPESCRIPT
+" NERDTree
+nmap <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeIgnore = ['^node_modules$']
 
-" Vim_jsx_pretty
-let g:vim_jsx_pretty_highlight_close_tag = 1
+" Ctrlp
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
-" Prettier
-let g:prettier#autoformat = 1
-"autocmd BufWritePre *.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
+" Coc.nvim exemple settings
+set hidden
+set nobackup
+set nowritebackup
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
 
-" Syntastic
-let g:syntastic_javascript_checkers = ['standard']
-let g:syntastic_javascript_standard_exec = 'happiness'
-let g:syntastic_javascript_standard_generic = 1
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" CloseTag
-let g:closetag_filenames = "*.js,*.html,*.xhtml,*.phtml,*.php,*.jsx,*.tsx"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" Ale
-let g:ale_set_highlights = 1 " Disable highligting
-let g:ale_completion_enabled = 0
-let g:ale_linter_aliases = {'typescriptreact': 'typescript'}
-highlight ALEError ctermbg=94 cterm=underline
-highlight ALEWarning ctermbg=95 cterm=underline
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <C-d> <Plug>(coc-range-select)
+xmap <silent> <C-d> <Plug>(coc-range-select)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+" set statusline = %{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
