@@ -1,7 +1,20 @@
-Custom shell and vim configuration
+### :love_letter: Dotfiles:
 
-using despacio colorscheme by https://github.com/AlessandroYorba/Despacio
+My dotfiles
 
-using twillight colorscheme by https://gist.github.com/stefri/1183140
+#### :exclamation: Requirements: 
 
-~/.myvimrc 
+_.zshrc:_
+
+ - [zsh-syntax-highlight](https://github.com/zsh-users/zsh-syntax-highlighting)
+ 
+_.vimrc:_
+
+ - [Plug](https://github.com/junegunn/vim-plug)
+ - [Pathogen](https://github.com/tpope/vim-pathogen) (optionnal)
+
+### Credits
+
+ - [Ben Awad](https://github.com/benawad)
+ - [Luke Smith](https://gist.github.com/LukeSmithxyz)
+ - [Tpope](https://github.com/tpope)
