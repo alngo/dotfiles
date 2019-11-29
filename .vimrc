@@ -52,7 +52,6 @@ setglobal wildmode=full
 " EDITING SETTINGS
 "============================================================================"
 setglobal history=200
-setglobal textwidth=78
 setglobal backspace=2
 setglobal complete-=i
 setglobal dictionary+=/usr/share/dict/words
