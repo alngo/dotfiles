@@ -1,211 +1,26 @@
-"============================================================================"
-" GLOBAL SETTINGS
-"============================================================================"
- 
-syntax on
-colorscheme desert
-filetype plugin indent on
-setglobal mouse=a
-setglobal autoread
-setglobal autowrite
-setglobal smartcase
-setglobal incsearch
-setglobal nocompatible
-setglobal path=.,,
-setglobal tags=./tags
-setglobal fileencoding=utf-8
-setglobal encoding=utf-8
-set laststatus=2
-set showtabline=2
-set guioptions-=e
+"=============================================================================
+"" Vim-Plug core
+"=============================================================================
+let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
-" DISPLAY
-"============================================================================"
-setglobal lazyredraw
-setglobal display=lastline
-setglobal scrolloff=2
-setglobal cmdheight=1
-set number
-set hlsearch
+let g:vim_bootstrap_langs = "c,javascript,rust,typescript"
+let g:vim_bootstrap_editor = "vim"
 
-" CURSOR SHAPE
-"============================================================================"
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if !filereadable(vimplug_exists)
+  if !executable("curl")
+    echoerr "You have to install curl or first install vim-plug yourself!"
+    execute "q!"
+  endif
+  echo "Installing Vim-Plug..."
+  echo ""
+  silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  let g:not_finish_vimplug = "yes"
 
-" WILD
-"============================================================================"
-set wildignore=*.o,*.a,*.so,*.pyc,*.swp,.git/,*.class,*/target/*,.idea/
-set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico,*.snap,
-set wildignore+=*.pdf,*.psd
-set wildignore+=*.o,*.a,*.pyc,*.d
-set wildignore+=*/node_modules/*
-set wildignore+=*/bower_components/*
-set wildignore+=*/dist/*
-set wildignore+=*/build/*
-set wildignore+=*/tmp/*
-set wildignore+=tags,.*pyc,*.o,*.d,*.swp
-setglobal wildmenu
-setglobal wildmode=full
-
-" EDITING SETTINGS
-"============================================================================"
-setglobal history=200
-setglobal backspace=2
-setglobal complete-=i
-setglobal dictionary+=/usr/share/dict/words
-setglobal infercase
-setglobal showmatch
-setglobal virtualedit=block
-setglobal shiftround
-setglobal autoindent
-set colorcolumn=80
-
-" TABULATIONS WIDTH                                                          "
-"============================================================================"
-autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype json setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype typescriptreact setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
-
-" FOLDING                                                                    "
-"============================================================================"
-setglobal foldenable
-setglobal foldlevelstart=10
-setglobal foldnestmax=10
-setglobal foldmethod=marker
-setglobal foldopen+=jump
-setglobal commentstring=#\ %s
-if !get(v:, 'vim_did_enter', !has('vim_starting'))
-	setlocal commentstring<
+  autocmd VimEnter * PlugInstall
 endif
-autocmd FileType c,cpp,cs,java,js        setlocal commentstring=//\ %s
-
-" INFORMATION                                                                "
-"============================================================================"
-setglobal confirm
-setglobal showcmd
-setglobal novisualbell
 
 "============================================================================"
-" MAPPING                                                                    "
-"============================================================================"
-
-" MISC
-"============================================================================"
-nnoremap Y y$
-nnoremap U <C-r>
-autocmd FileType Help noremap <buffer> q :q<cr>
-
-" EDITION
-"============================================================================"
-nnoremap <leader>t 	:tabedit **/*
-nnoremap <leader>e 	:e **/*
-
-" TABS NAVIGATION
-"============================================================================"
-nnoremap <leader>[ 	:tabprevious<CR>
-nnoremap <leader>] 	:tabnext<CR>
-
-" PANES NAVIGATION                                                           "
-"============================================================================"
-inoremap <C-h> <C-\><C-N><C-w>h
-inoremap <C-j> <C-\><C-N><C-w>j
-inoremap <C-k> <C-\><C-N><C-w>k
-inoremap <C-l> <C-\><C-N><C-w>l
-
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-tnoremap <C-h> <C-w>h 
-tnoremap <C-j> <C-w>j
-tnoremap <C-k> <C-w>k
-tnoremap <C-l> <C-w>l
-
-" BUFFERS NAVIGATION                                                         
-"============================================================================"
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
-
-" QUICKFIX NAVIGATION
-"============================================================================"
-nnoremap <leader>n :cn<CR>
-nnoremap <leader>p :cp<CR>
-
-
-" PUM MAPPING
-"============================================================================"
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
-inoremap <silent><expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
-inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
-
-"============================================================================"
-" HELPER FUNCTION
-"============================================================================"
-
-" Quickfix filename into args for argdo
-"============================================================================"
-command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
-function! QuickfixFilenames()
-  " Building a hash ensures we get each buffer only once
-  let buffer_numbers = {}
-  for quickfix_item in getqflist()
-    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
-  endfor
-  return join(values(buffer_numbers))
-endfunction
-
-" Deleter trailing spave on write
-"============================================================================"
-func! DeleteTrailingWS()
-	exe "normal mz"
-	%s/\s\+$//ge
-	exe "normal `z"
-endfunc
-autocmd BufWrite *.c :call DeleteTrailingWS()
-autocmd BufWrite *.h :call DeleteTrailingWS()
-autocmd BufWrite *.js :call DeleteTrailingWS()
-
-" Deleter trailing spave on write
-"============================================================================"
-let g:highlighting = 0
-function! Highlighting()
-	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
-		let g:highlighting = 0
-		return ":silent nohlsearch\<CR>"
-	endif
-	let @/ = '\<'.expand('<cword>').'\>'
-	let g:highlighting = 1
-	return ":silent set hlsearch\<CR>"
-endfunction
-nnoremap <silent> <expr> <CR> Highlighting()
-
-" AUTOSEARCH SEARCH WITH *
-"============================================================================"
-vnoremap <silent> * :<C-U>
-	\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-	\gvy/<C-R><C-R>=substitute(
-	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-	\gV:call setreg('"', old_reg, old_regtype)<CR>
-	
-"============================================================================"
-" PLUGINS
-"============================================================================"
-
-" PATHOGEN
-"============================================================================"
-execute pathogen#infect()
-
-" PLUG
+" PLUGS
 "============================================================================"
 call plug#begin('~/.vim/plugged')
 
@@ -230,15 +45,222 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " FUZZY SEARCH
 Plug 'ctrlpvim/ctrlp.vim'
 
+" ANSI C
+Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
+Plug 'ludwig/split-manpage.vim'
+
 " RUST
+Plug 'racer-rust/vim-racer'
 Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
-"============================================================================"
-" PLUGINS SETTINGS
-"============================================================================"
+filetype plugin indent on
 
+"============================================================================"
+" Basic Setup    
+"============================================================================"
+"" Encoding
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
+set ttyfast
+
+"" Fix backspace indent
+set backspace=indent,eol,start
+
+"" Tabs
+set tabstop=4
+set shiftwidth=4
+set noexpandtab
+
+"" Hidden buffers
+set hidden
+
+"" Search
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+set fileformats=unix,dos,mac
+
+if exists('$SHELL')
+	set shell=$SHELL
+else
+	set shell=/bin/sh
+endif
+
+set confirm
+set showcmd
+set novisualbell
+
+"============================================================================"
+" Visual Settings
+"============================================================================"
+silent! colorscheme desert
+syntax on
+set ruler
+set number
+
+let no_buffers_menu=1
+set mousemodel=popup
+set t_Co=256
+set guioptions=egmrti
+set gfn=Monospace\ 10
+
+"" Cursor settings
+set gcr=a:blinkon0
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+"" Status bar
+set laststatus=2
+
+"" Modeline overrides
+set modeline
+set modelines=10
+
+set title
+set titleold="Terminal"
+set titlestring=%F
+
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
+
+if exists("*fugitive#statusline")
+  set statusline+=%{fugitive#statusline()}
+endif
+
+"" Search mapping
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+"=============================================================================
+"" Abbreviations
+"=============================================================================
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
+
+"" NERDTree configuration
+let g:NERDTreeChDirMode=2
+let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
+let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+let g:NERDTreeShowBookmarks=1
+let g:nerdtree_tabs_focus_on_files=1
+let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
+let g:NERDTreeWinSize = 50
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
+nnoremap <silent> <F2> :NERDTreeFind<CR>
+nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+
+"=============================================================================
+"" Mappings
+"=============================================================================
+"" Misc
+nnoremap Y y$
+nnoremap U <C-r>
+
+"" terminal emulation
+nnoremap <silent> <leader>sh :terminal<CR>
+
+"" Git
+noremap <Leader>ga :Gwrite<CR>
+noremap <Leader>gc :Gcommit<CR>
+noremap <Leader>gsh :Gpush<CR>
+noremap <Leader>gll :Gpull<CR>
+noremap <Leader>gs :Gstatus<CR>
+noremap <Leader>gb :Gblame<CR>
+noremap <Leader>gd :Gvdiff<CR>
+noremap <Leader>gr :Gremove<CR>
+
+"" Buffer nav
+noremap <leader>z :bp<CR>
+noremap <leader>q :bp<CR>
+noremap <leader>x :bn<CR>
+noremap <leader>w :bn<CR>
+
+"" Tabs nav
+nnoremap <leader>[ 	:tabprevious<CR>
+nnoremap <leader>] 	:tabnext<CR>
+
+"" Close buffer
+noremap <leader>c :bd<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
+
+"" Switching windows
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
+
+"" Edit command
+nnoremap <leader>t 	:tabedit **/*
+nnoremap <leader>e 	:e **/*
+
+set colorcolumn=80
+
+"" Folding                                                                    "
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+set foldmethod=marker
+set foldopen+=jump
+set commentstring=#\ %s
+if !get(v:, 'vim_did_enter', !has('vim_starting'))
+	setlocal commentstring<
+endif
+
+"" Pum mapping
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+inoremap <silent><expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
+
+"=============================================================================
+"" Functions
+"=============================================================================
+func! DeleteTrailingWS()
+	exe "normal mz"
+	%s/\s\+$//ge
+	exe "normal `z"
+endfunc
+autocmd BufWrite *.c :call DeleteTrailingWS()
+autocmd BufWrite *.h :call DeleteTrailingWS()
+autocmd BufWrite *.rs :call DeleteTrailingWS()
+
+let g:highlighting = 0
+function! Highlighting()
+	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
+		let g:highlighting = 0
+		return ":silent nohlsearch\<CR>"
+	endif
+	let @/ = '\<'.expand('<cword>').'\>'
+	let g:highlighting = 1
+	return ":silent set hlsearch\<CR>"
+endfunction
+nnoremap <silent> <expr> <CR> Highlighting()
+
+vnoremap <silent> * :<C-U>
+	\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+	\gvy/<C-R><C-R>=substitute(
+	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+	\gV:call setreg('"', old_reg, old_regtype)<CR>
+	
+"=============================================================================
+"" Plugs settings
+"=============================================================================
 " Flagship"
 autocmd User Flags call Hoist("buffer", "fugitive#statusline")
 
@@ -249,15 +271,10 @@ highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
-" NERDTree
-nmap <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeIgnore = ['^node_modules$']
-
 " Ctrlp
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
-" Coc.nvim exemple settings
-set hidden
+"" Coc.nvim
 set nobackup
 set nowritebackup
 set cmdheight=2
@@ -265,8 +282,6 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -278,23 +293,15 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
@@ -305,69 +312,38 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
-  " Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
-" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
 nmap <silent> <C-d> <Plug>(coc-range-select)
 xmap <silent> <C-d> <Plug>(coc-range-select)
 
-" Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-" set statusline = %{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
-" Show all diagnostics
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" Show commands
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document
 nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
