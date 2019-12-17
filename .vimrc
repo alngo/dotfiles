@@ -3,9 +3,6 @@
 "=============================================================================
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
-let g:vim_bootstrap_langs = "c,javascript,rust,typescript"
-let g:vim_bootstrap_editor = "vim"
-
 if !filereadable(vimplug_exists)
   if !executable("curl")
     echoerr "You have to install curl or first install vim-plug yourself!"
