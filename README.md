@@ -19,3 +19,4 @@ _.vimrc:_
  - [Ben Awad](https://github.com/benawad)
  - [Luke Smith](https://gist.github.com/LukeSmithxyz)
  - [Tpope](https://github.com/tpope)
+ - [Vim-bootstrap](http://vim-bootstrap.com/)
