@@ -12,7 +12,6 @@ if !filereadable(vimplug_exists)
   echo ""
   silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
   let g:not_finish_vimplug = "yes"
-
   autocmd VimEnter * PlugInstall
 endif
 
@@ -27,7 +26,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-flagship'
 
 "" MISC
 Plug 'majutsushi/tagbar'
@@ -90,6 +88,14 @@ set tabstop=4
 set shiftwidth=4
 set noexpandtab
 
+"" Tabs overrides
+autocmd Filetype typescriptreact setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype json setlocal ts=2 sw=2 sts=2 expandtab
+
 "" Hidden buffers
 set hidden
 
@@ -147,11 +153,7 @@ set title
 set titleold="Terminal"
 set titlestring=%F
 
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
-
-if exists("*fugitive#statusline")
-  set statusline+=%{fugitive#statusline()}
-endif
+set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
 
 "=============================================================================
 "" Abbreviations
@@ -302,9 +304,6 @@ vnoremap <silent> * :<C-U>
 "=============================================================================
 "" Plugs settings
 "=============================================================================
-" Flagship"
-autocmd User Flags call Hoist("buffer", "fugitive#statusline")
-
 " vim-fugitive
 set diffopt+=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
