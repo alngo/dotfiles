@@ -36,6 +36,7 @@ Plug 'pbondoer/vim-42header'
 
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'alessandroyorba/despacio'
 
 " NEERDTREE
 Plug 'scrooloose/nerdtree'
@@ -113,7 +114,7 @@ set novisualbell
 "============================================================================"
 " Visual Settings
 "============================================================================"
-silent! colorscheme desert
+silent! colorscheme despacio
 
 syntax on
 set ruler
@@ -341,11 +342,6 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -399,3 +395,4 @@ nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
