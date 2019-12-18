@@ -9,7 +9,8 @@ _.zshrc:_
  - [zsh-syntax-highlight](https://github.com/zsh-users/zsh-syntax-highlighting)
  
 _.vimrc:_
-
+ 
+ - [Pynvim](https://github.com/neovim/pynvim)
  - [Plug](https://github.com/junegunn/vim-plug)
  - [Pathogen](https://github.com/tpope/vim-pathogen) (optionnal)
 
