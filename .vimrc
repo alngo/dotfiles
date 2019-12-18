@@ -120,6 +120,7 @@ set ruler
 set number
 
 let no_buffers_menu=1
+set mouse=a
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
@@ -205,6 +206,16 @@ noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
 
 "" Buffer nav
+inoremap <leader>z <C-w>:bp<CR>
+inoremap <leader>q <C-w>:bp<CR>
+inoremap <leader>x <C-w>:bn<CR>
+inoremap <leader>w <C-w>:bn<CR>
+
+tnoremap <leader>z <C-w>:bp<CR>
+tnoremap <leader>q <C-w>:bp<CR>
+tnoremap <leader>x <C-w>:bn<CR>
+tnoremap <leader>w <C-w>:bn<CR>
+
 noremap <leader>z :bp<CR>
 noremap <leader>q :bp<CR>
 noremap <leader>x :bn<CR>
@@ -219,6 +230,9 @@ noremap <leader>c :bd<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
+
+"" Edition
+nnoremap <leader>e :e **/*
 
 "" Panes nav
 inoremap <C-h> <C-\><C-N><C-w>h
@@ -298,8 +312,8 @@ highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Re
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
 "" Denite.vim
-nmap ; :Denite buffer -split=floating -winrow=1<CR>
-nmap <leader>t :Denite file/rec -split=floating -winrow=1<CR>
+nmap ; :Denite buffer<CR>
+nmap <leader>t :Denite file/rec<CR>
 nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
 nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
 
@@ -385,4 +399,3 @@ nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
