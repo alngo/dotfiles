@@ -29,18 +29,25 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-flagship'
 
+"" MISC
+Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-syntax-extra'
 Plug 'pbondoer/vim-42header'
 
-" Autocompletion
+" CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " NEERDTREE
 Plug 'scrooloose/nerdtree'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-" FUZZY SEARCH
-Plug 'ctrlpvim/ctrlp.vim'
+if has('nvim')
+  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/denite.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 " ANSI C
 Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
@@ -49,6 +56,13 @@ Plug 'ludwig/split-manpage.vim'
 " RUST
 Plug 'racer-rust/vim-racer'
 Plug 'rust-lang/rust.vim'
+
+" JAVASCRIPT
+Plug 'jelera/vim-javascript-syntax'
+
+" TYPESCRIPT
+Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
 
 call plug#end()
 
@@ -62,6 +76,10 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set ttyfast
+
+"" wildmenu
+set wildmenu
+set wildmode=longest:full,full
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -96,6 +114,7 @@ set novisualbell
 " Visual Settings
 "============================================================================"
 silent! colorscheme desert
+
 syntax on
 set ruler
 set number
@@ -115,6 +134,9 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 "" Status bar
 set laststatus=2
 
+"" Color column
+set colorcolumn=80
+
 "" Modeline overrides
 set modeline
 set modelines=10
@@ -128,10 +150,6 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 if exists("*fugitive#statusline")
   set statusline+=%{fugitive#statusline()}
 endif
-
-"" Search mapping
-nnoremap n nzzzv
-nnoremap N Nzzzv
 
 "=============================================================================
 "" Abbreviations
@@ -162,6 +180,13 @@ nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 "=============================================================================
 "" Mappings
 "=============================================================================
+"" Set working directory
+nnoremap <leader>. :lcd %:p:h<CR>
+
+"" Search mapping
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
 "" Misc
 nnoremap Y y$
 nnoremap U <C-r>
@@ -195,17 +220,21 @@ noremap <leader>c :bd<CR>
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 
-"" Switching windows
+"" Panes nav
+inoremap <C-h> <C-\><C-N><C-w>h
+inoremap <C-j> <C-\><C-N><C-w>j
+inoremap <C-k> <C-\><C-N><C-w>k
+inoremap <C-l> <C-\><C-N><C-w>l
+
+tnoremap <C-h> <C-w>h
+tnoremap <C-j> <C-w>j
+tnoremap <C-k> <C-w>k
+tnoremap <C-l> <C-w>l
+
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
-
-"" Edit command
-nnoremap <leader>t 	:tabedit **/*
-nnoremap <leader>e 	:e **/*
-
-set colorcolumn=80
 
 "" Folding                                                                    "
 set foldenable
@@ -268,8 +297,27 @@ highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
-" Ctrlp
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+"" Denite.vim
+nmap ; :Denite buffer -split=floating -winrow=1<CR>
+nmap <leader>t :Denite file/rec -split=floating -winrow=1<CR>
+nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
+nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
 
 "" Coc.nvim
 set nobackup
@@ -278,12 +326,6 @@ set cmdheight=2
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
