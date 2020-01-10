@@ -31,6 +31,9 @@ Plug 'tpope/vim-obsession'
 Plug 'justinmk/vim-syntax-extra'
 Plug 'pbondoer/vim-42header'
 
+" Tagbar
+Plug 'majutsushi/tagbar' 
+
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'alessandroyorba/despacio'
@@ -265,6 +268,9 @@ highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Re
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
+
+"" Tagbar
+nnoremap <silent> <C-t> :TagbarToggle<CR>
 
 "" NERDTree configuration
 let g:NERDTreeChDirMode=2
