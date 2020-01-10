@@ -28,7 +28,6 @@ Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 
 "" MISC
-Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-syntax-extra'
 Plug 'pbondoer/vim-42header'
 
@@ -48,10 +47,6 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-" ANSI C
-Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
-Plug 'ludwig/split-manpage.vim'
-
 " RUST
 Plug 'racer-rust/vim-racer'
 Plug 'rust-lang/rust.vim'
@@ -62,6 +57,9 @@ Plug 'jelera/vim-javascript-syntax'
 " TYPESCRIPT
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
+
+"" React
+Plug 'alvan/vim-closetag'
 
 call plug#end()
 
@@ -74,7 +72,6 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
-set ttyfast
 
 "" wildmenu
 set wildmenu
@@ -105,39 +102,35 @@ set incsearch
 set ignorecase
 set smartcase
 
-set fileformats=unix,dos,mac
-
+"" Shell settings
 if exists('$SHELL')
 	set shell=$SHELL
 else
 	set shell=/bin/sh
 endif
 
+"" Mouse Settings
+let no_buffers_menu=1
+set mouse=a
+set mousemodel=popup
+
+"" Misc
 set confirm
-set showcmd
+set noshowcmd
 set novisualbell
 
 "============================================================================"
 " Visual Settings
 "============================================================================"
 silent! colorscheme despacio
-
 syntax on
-set ruler
 set number
-
-let no_buffers_menu=1
-set mouse=a
-set mousemodel=popup
-set t_Co=256
-set guioptions=egmrti
-set gfn=Monospace\ 10
 
 "" Cursor settings
 set gcr=a:blinkon0
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 
 "" Status bar
 set laststatus=2
@@ -145,14 +138,7 @@ set laststatus=2
 "" Color column
 set colorcolumn=80
 
-"" Modeline overrides
-set modeline
-set modelines=10
-
-set title
-set titleold="Terminal"
-set titlestring=%F
-
+"" Statusline
 set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
 
 "=============================================================================
@@ -169,27 +155,11 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-"" NERDTree configuration
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let g:NERDTreeWinSize = 50
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-nnoremap <silent> <C-n> :NERDTreeToggle<CR>
-
 "=============================================================================
 "" Mappings
 "=============================================================================
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
-
-"" Search mapping
-nnoremap n nzzzv
-nnoremap N Nzzzv
 
 "" Misc
 nnoremap Y y$
@@ -197,16 +167,6 @@ nnoremap U <C-r>
 
 "" terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
-
-"" Git
-noremap <Leader>ga :Gwrite<CR>
-noremap <Leader>gc :Gcommit<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gb :Gblame<CR>
-noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gr :Gremove<CR>
 
 "" Buffer nav
 inoremap <leader>z <C-w>:bp<CR>
@@ -228,14 +188,9 @@ noremap <leader>w :bn<CR>
 nnoremap <leader>[ 	:tabprevious<CR>
 nnoremap <leader>] 	:tabnext<CR>
 
-"" Close buffer
-noremap <leader>c :bd<CR>
-
-"" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<cr>
-
 "" Edition
 nnoremap <leader>e :e **/*
+nnoremap <leader>t :tabnew **/*
 
 "" Panes nav
 inoremap <C-h> <C-\><C-N><C-w>h
@@ -304,16 +259,28 @@ vnoremap <silent> * :<C-U>
 "=============================================================================
 "" Plugs settings
 "=============================================================================
-" vim-fugitive
-set diffopt+=vertical
+"" vim-fugitive
+set diffopt=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
+"" NERDTree configuration
+let g:NERDTreeChDirMode=2
+let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
+let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+let g:NERDTreeShowBookmarks=1
+let g:nerdtree_tabs_focus_on_files=1
+let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
+let g:NERDTreeWinSize = 50
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.d
+nnoremap <silent> <F2> :NERDTreeFind<CR>
+nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+
 "" Denite.vim
 nmap ; :Denite buffer<CR>
-nmap <leader>t :Denite file/rec<CR>
+nmap <leader>o :Denite file/rec<CR>
 nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
 nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
 
