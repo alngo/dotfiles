@@ -29,7 +29,6 @@ Plug 'tpope/vim-obsession'
 
 "" MISC
 Plug 'justinmk/vim-syntax-extra'
-Plug 'pbondoer/vim-42header'
 
 " Tagbar
 Plug 'majutsushi/tagbar' 
@@ -50,27 +49,13 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-" RUST
-Plug 'racer-rust/vim-racer'
-Plug 'rust-lang/rust.vim'
-
-" JAVASCRIPT
-Plug 'jelera/vim-javascript-syntax'
-
-" TYPESCRIPT
-Plug 'leafgarland/typescript-vim'
-Plug 'HerringtonDarkholme/yats.vim'
-
-"" React
-Plug 'alvan/vim-closetag'
-
 call plug#end()
-
-filetype plugin indent on
 
 "============================================================================"
 " Basic Setup    
 "============================================================================"
+filetype plugin indent on
+
 "" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -87,14 +72,6 @@ set backspace=indent,eol,start
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
-
-"" Tabs overrides
-autocmd Filetype typescriptreact setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype scss setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype json setlocal ts=2 sw=2 sts=2 expandtab
 
 "" Hidden buffers
 set hidden
@@ -130,10 +107,18 @@ syntax on
 set number
 
 "" Cursor settings
-set gcr=a:blinkon0
-let &t_SI.="\e[5 q" "SI = INSERT mode
+let &t_SI.="\e[6 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
-let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
+
+"Cursor settings:
+
+"  1 -> blinking block
+"  2 -> solid block 
+"  3 -> blinking underscore
+"  4 -> solid underscore
+"  5 -> blinking vertical bar
+"  6 -> solid vertical bar
 
 "" Status bar
 set laststatus=2
@@ -149,6 +134,7 @@ set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
 "=============================================================================
 cnoreabbrev W! w!
 cnoreabbrev Q! q!
+cnoreabbrev Qa! qa!
 cnoreabbrev Qall! qall!
 cnoreabbrev Wq wq
 cnoreabbrev Wa wa
@@ -172,19 +158,13 @@ nnoremap U <C-r>
 nnoremap <silent> <leader>sh :terminal<CR>
 
 "" Buffer nav
-inoremap <leader>z <C-w>:bp<CR>
 inoremap <leader>q <C-w>:bp<CR>
-inoremap <leader>x <C-w>:bn<CR>
 inoremap <leader>w <C-w>:bn<CR>
 
-tnoremap <leader>z <C-w>:bp<CR>
 tnoremap <leader>q <C-w>:bp<CR>
-tnoremap <leader>x <C-w>:bn<CR>
 tnoremap <leader>w <C-w>:bn<CR>
 
-noremap <leader>z :bp<CR>
 noremap <leader>q :bp<CR>
-noremap <leader>x :bn<CR>
 noremap <leader>w :bn<CR>
 
 "" Tabs nav
@@ -241,24 +221,6 @@ autocmd BufWrite *.c :call DeleteTrailingWS()
 autocmd BufWrite *.h :call DeleteTrailingWS()
 autocmd BufWrite *.rs :call DeleteTrailingWS()
 
-let g:highlighting = 0
-function! Highlighting()
-	if g:highlighting == 1 && @/ =~ '^\\<'.expand('<cword>').'\\>$'
-		let g:highlighting = 0
-		return ":silent nohlsearch\<CR>"
-	endif
-	let @/ = '\<'.expand('<cword>').'\>'
-	let g:highlighting = 1
-	return ":silent set hlsearch\<CR>"
-endfunction
-nnoremap <silent> <expr> <CR> Highlighting()
-
-vnoremap <silent> * :<C-U>
-	\let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-	\gvy/<C-R><C-R>=substitute(
-	\escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-	\gV:call setreg('"', old_reg, old_regtype)<CR>
-	
 "=============================================================================
 "" Plugs settings
 "=============================================================================
@@ -314,6 +276,17 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -334,6 +307,7 @@ function! s:show_documentation()
 endfunction
 
 autocmd CursorHold * silent call CocActionAsync('highlight')
+nnoremap <silent> <CR> :nohl<CR>
 
 nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
