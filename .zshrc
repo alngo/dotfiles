@@ -5,8 +5,8 @@ export LC_ALL=en_US.UTF-8
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
-if [ -f ~/.zsh/zsh_classy_custom ]; then
-	. ~/.zsh/zsh_classy_custom
+if [ -f ~/.zsh/custom_prompt ]; then
+	. ~/.zsh/custom_promt
 fi
 
 precmd() { eval "$PROMPT_COMMAND" }
