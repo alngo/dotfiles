@@ -1,5 +1,5 @@
 "=============================================================================
-"" Vim-Plug core
+" Vim-Plug core
 "=============================================================================
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
@@ -27,74 +27,58 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 
-"" MISC
+" Enhanced syntax for c
 Plug 'justinmk/vim-syntax-extra'
 
 " Tagbar
-Plug 'majutsushi/tagbar' 
+Plug 'majutsushi/tagbar'
 
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Colorscheme
 Plug 'alessandroyorba/despacio'
-
-" NEERDTREE
-Plug 'scrooloose/nerdtree'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-if has('nvim')
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/denite.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
 
 call plug#end()
 
 "============================================================================"
-" Basic Setup    
+" Basic Setup
 "============================================================================"
+" plugin
 filetype plugin indent on
 
-"" Encoding
+" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 
-"" wildmenu
+" wildmenu
 set wildmenu
 set wildmode=longest:full,full
 
-"" Fix backspace indent
+" Fix backspace indent
 set backspace=indent,eol,start
 
-"" Tabs
+" Tabs
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
 
-"" Hidden buffers
+" Hidden buffers
 set hidden
 
-"" Search
+" Search
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
 
-"" Shell settings
-if exists('$SHELL')
-	set shell=$SHELL
-else
-	set shell=/bin/sh
-endif
-
-"" Mouse Settings
+" Mouse Settings
 let no_buffers_menu=1
 set mouse=a
 set mousemodel=popup
 
-"" Misc
+" Misc
 set confirm
 set noshowcmd
 set novisualbell
@@ -106,27 +90,18 @@ silent! colorscheme despacio
 syntax on
 set number
 
-"" Cursor settings
+" Cursor settings
 let &t_SI.="\e[6 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
 
-"Cursor settings:
-
-"  1 -> blinking block
-"  2 -> solid block 
-"  3 -> blinking underscore
-"  4 -> solid underscore
-"  5 -> blinking vertical bar
-"  6 -> solid vertical bar
-
-"" Status bar
+" Status bar
 set laststatus=2
 
-"" Color column
+" Color column
 set colorcolumn=80
 
-"" Statusline
+" Statusline
 set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
 
 "=============================================================================
@@ -147,62 +122,53 @@ cnoreabbrev Qall qall
 "=============================================================================
 "" Mappings
 "=============================================================================
-"" Set working directory
+" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
 
-"" Misc
+" Misc
 nnoremap Y y$
 nnoremap U <C-r>
 
-"" terminal emulation
+" terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
 
-"" Buffer nav
+" Buffer nav
 inoremap <leader>q <C-w>:bp<CR>
 inoremap <leader>w <C-w>:bn<CR>
-
 tnoremap <leader>q <C-w>:bp<CR>
 tnoremap <leader>w <C-w>:bn<CR>
-
 noremap <leader>q :bp<CR>
 noremap <leader>w :bn<CR>
 
-"" Tabs nav
+" Tabs nav
 nnoremap <leader>[ 	:tabprevious<CR>
 nnoremap <leader>] 	:tabnext<CR>
 
-"" Edition
+" Edition
 nnoremap <leader>e :e **/*
 nnoremap <leader>t :tabnew **/*
 
-"" Panes nav
+" Panes nav
 inoremap <C-h> <C-\><C-N><C-w>h
 inoremap <C-j> <C-\><C-N><C-w>j
 inoremap <C-k> <C-\><C-N><C-w>k
 inoremap <C-l> <C-\><C-N><C-w>l
-
 tnoremap <C-h> <C-w>h
 tnoremap <C-j> <C-w>j
 tnoremap <C-k> <C-w>k
 tnoremap <C-l> <C-w>l
-
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 
-"" Folding                                                                    "
-set foldenable
-set foldlevelstart=10
-set foldnestmax=10
-set foldmethod=marker
-set foldopen+=jump
-set commentstring=#\ %s
-if !get(v:, 'vim_did_enter', !has('vim_starting'))
-	setlocal commentstring<
-endif
+" Pane resize
+nnoremap <Up>    :resize +2<CR>
+nnoremap <Down>  :resize -2<CR>
+nnoremap <Left>  :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
 
-"" Pum mapping
+" Pum mapping
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
 inoremap <silent><expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
 inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
@@ -210,65 +176,28 @@ inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
 
 "=============================================================================
-"" Functions
+" Autocommand
 "=============================================================================
-func! DeleteTrailingWS()
-	exe "normal mz"
-	%s/\s\+$//ge
-	exe "normal `z"
-endfunc
-autocmd BufWrite *.c :call DeleteTrailingWS()
-autocmd BufWrite *.h :call DeleteTrailingWS()
-autocmd BufWrite *.rs :call DeleteTrailingWS()
+" Remove trailing space on save
+autocmd BufWritePre * %s/\s\+$//e
 
 "=============================================================================
-"" Plugs settings
+" Plugs settings
 "=============================================================================
-"" vim-fugitive
+" vim-fugitive
 set diffopt=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
-"" Tagbar
+" vim-comment
+autocmd FileType c setlocal commentstring=// %s
+
+" Tagbar
 nnoremap <silent> <C-t> :TagbarToggle<CR>
 
-"" NERDTree configuration
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let g:NERDTreeWinSize = 50
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*.o,*.d
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-nnoremap <silent> <C-n> :NERDTreeToggle<CR>
-
-"" Denite.vim
-nmap ; :Denite buffer<CR>
-nmap <leader>o :Denite file/rec<CR>
-nnoremap <leader>g :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
-
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <Space>
-  \ denite#do_map('toggle_select').'j'
-endfunction
-
-"" Coc.nvim
+" Coc.nvim
 set nobackup
 set nowritebackup
 set cmdheight=2
@@ -276,16 +205,8 @@ set updatetime=300
 set shortmess+=c
 set signcolumn=yes
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
