@@ -185,6 +185,9 @@ inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
 " Remove trailing space on save
 autocmd BufWritePre * %s/\s\+$//e
 
+" vim-comment
+autocmd FileType c setlocal commentstring=//\ %s
+
 "=============================================================================
 " Plugs settings
 "=============================================================================
@@ -195,8 +198,6 @@ highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
 
-" vim-comment
-autocmd FileType c setlocal commentstring=// %s
 
 " Tagbar
 nnoremap <silent> <C-t> :TagbarToggle<CR>
