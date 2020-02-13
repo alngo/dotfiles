@@ -55,6 +55,7 @@ set fileencodings=utf-8
 " wildmenu
 set wildmenu
 set wildmode=longest:full,full
+set wildignore+=*/node_modules/*,_site,*/__pycache__/,*/venv/*,*/target/*,*/.vim$,\~$,*/.log,*/.aux,*/.cls,*/.aux,*/.bbl,*/.blg,*/.fls,*/.fdb*/,*/.toc,*/.out,*/.glo,*/.log,*/.ist,*/.fdb_latexmk,.o,.d,.out
 
 " Fix backspace indent
 set backspace=indent,eol,start
@@ -96,13 +97,13 @@ let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
 
 " Status bar
-set laststatus=2
+" set laststatus=2
 
 " Color column
 set colorcolumn=80
 
 " Statusline
-set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
+" set statusline=%F%m%r%h%w%=(%Y)\ (line\ %l\/%L,\ col\ %c)
 
 "=============================================================================
 "" Abbreviations
