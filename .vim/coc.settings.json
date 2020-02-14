@@ -2,7 +2,9 @@
 	"coc.preferences.formatOnType": true,
 	"coc.preferences.formatOnSaveFiletypes": ["python"],
 	"python.linting.pylintEnabled": false,
+	"python.linting.pep8Enabled": true,
 	"python.linting.enabled": true,
+	"python.formatting.provider": "autopep8",
 	"python.formatting.blackArgs": [
 		"-l",
 		"79"
