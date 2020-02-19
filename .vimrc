@@ -146,8 +146,8 @@ nnoremap <leader>[ 	:tabprevious<CR>
 nnoremap <leader>] 	:tabnext<CR>
 
 " Quickfix nav
-nnoremap <leader>n :cnext
-nnoremap <leader>p :cprevious
+nnoremap <leader>n :cnext<CR>
+nnoremap <leader>p :cprevious<CR>
 
 " Edition
 nnoremap <leader>e :e **/*
