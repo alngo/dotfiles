@@ -8,6 +8,8 @@
     "typescriptreact"
   ],
   "coc.preferences.formatOnSaveFiletypes": [
+    "cls",
+    "apex",
     "css",
     "markdown",
     "python",
@@ -21,16 +23,6 @@
   "tsserver.formatOnType": true,
   "coc.preferences.formatOnType": true,
   "languageserver": {
-    "apex": {
-      "command": "java",
-      "args": [
-        "-cp /usr/bin/apex-jorje-lsp.jar",
-        "-Ddebug.internal.errors=true",
-        "-Ddebug.semantic.errors=false",
-        "apex.jorje.lsp.ApexLanguageServerLauncher"
-      ],
-      "filetypes": ["cls", "apex"]
-    },
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
