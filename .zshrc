@@ -6,7 +6,7 @@ export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
 if [ -f ~/.zsh/custom_prompt ]; then
-	. ~/.zsh/custom_promt
+	. ~/.zsh/custom_prompt
 fi
 
 precmd() { eval "$PROMPT_COMMAND" }
@@ -28,7 +28,7 @@ HISTFILE=~/.cache/zsh/history
 autoload -U compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist
-compinit
+compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 _comp_options+=(globdots)		# Include hidden files.
 
 #===============================================================================#
@@ -68,14 +68,15 @@ echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 #===============================================================================#
-# => Additional Files	
+# => Additional Files
 #===============================================================================#
 [ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
 [ -f "$HOME/.config/pathrc" ] && source "$HOME/.config/pathrc"
-[ -f "$HOME/.config/variablerc" ] && source "$HOME/.config/variablerc"
+[ -f "$HOME/.config/varsrc" ] && source "$HOME/.config/varsrc"
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
+[ -f "$HOME/.config/condarc" ] && source "$HOME/.config/condarc"
 
 #===============================================================================#
 # => ZSH SYNTAX HIGHTLIGHT
 #===============================================================================#
-source $HOME/.brew/Cellar/zsh-syntax-highlighting/0.6.0/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source /usr/local/Cellar/zsh-syntax-highlighting/0.7.1/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
