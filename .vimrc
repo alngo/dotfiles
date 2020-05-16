@@ -20,6 +20,7 @@ endif
 "============================================================================"
 call plug#begin('~/.vim/plugged')
 
+" Several helper
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
@@ -46,6 +47,9 @@ call plug#end()
 "============================================================================"
 " plugin
 filetype plugin indent on
+
+"viminfo
+set viminfo+=n~/.cache/vim/viminfo
 
 " Encoding
 set encoding=utf-8
@@ -168,8 +172,8 @@ noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 
 " Pane resize
-nnoremap <Up>    :resize +2<CR>
-nnoremap <Down>  :resize -2<CR>
+nnoremap <Up>    :resize -2<CR>
+nnoremap <Down>  :resize +2<CR>
 nnoremap <Left>  :vertical resize +2<CR>
 nnoremap <Right> :vertical resize -2<CR>
 
@@ -192,34 +196,6 @@ autocmd FileType c setlocal commentstring=//\ %s
 "=============================================================================
 " Function
 "=============================================================================
-" Define a command to make it easier to use
-command! -nargs=+ QFDo call QFDo(<q-args>)
-
-" Function that does the work
-function! QFDo(command)
-    " Create a dictionary so that we can
-    " get the list of buffers rather than the
-    " list of lines in buffers (easy way
-    " to get unique entries)
-    let buffer_numbers = {}
-    " For each entry, use the buffer number as
-    " a dictionary key (won't get repeats)
-    for fixlist_entry in getqflist()
-        let buffer_numbers[fixlist_entry['bufnr']] = 1
-    endfor
-    " Make it into a list as it seems cleaner
-    let buffer_number_list = keys(buffer_numbers)
-
-    " For each buffer
-    for num in buffer_number_list
-        " Select the buffer
-        exe 'buffer' num
-        " Run the command that's passed as an argument
-        exe a:command
-        " Save if necessary
-        update
-    endfor
-endfunction
 
 "=============================================================================
 " Plugs settings
@@ -230,7 +206,6 @@ highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Re
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
-
 
 " Tagbar
 nnoremap <silent> <C-t> :TagbarToggle<CR>
