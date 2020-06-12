@@ -28,9 +28,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 
-" Enhanced syntax for c
-Plug 'justinmk/vim-syntax-extra'
-
 " Tagbar
 Plug 'majutsushi/tagbar'
 
@@ -174,8 +171,8 @@ noremap <C-h> <C-w>h
 " Pane resize
 nnoremap <Up>    :resize -2<CR>
 nnoremap <Down>  :resize +2<CR>
-nnoremap <Left>  :vertical resize +2<CR>
-nnoremap <Right> :vertical resize -2<CR>
+nnoremap <Left>  :vertical resize -2<CR>
+nnoremap <Right> :vertical resize +2<CR>
 
 " Pum mapping
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
