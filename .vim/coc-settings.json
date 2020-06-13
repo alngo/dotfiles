@@ -1,27 +1,18 @@
 {
-  "prettier.disableSuccessMessage": true,
-  "eslint.autoFixOnSave": true,
-  "eslint.filetypes": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
   "coc.preferences.formatOnSaveFiletypes": [
-    "cls",
-    "apex",
     "css",
     "markdown",
-    "python",
+    "typescripts",
     "html",
+    "ts",
+    "js",
+    "tsx",
+    "jsx",
+    "python",
     "json",
-    "javascript",
     "javascriptreact",
-    "typescript",
     "typescriptreact"
   ],
-  "tsserver.formatOnType": true,
-  "coc.preferences.formatOnType": true,
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
