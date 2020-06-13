@@ -28,14 +28,14 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 
-" Polyglot
-Plug 'sheerun/vim-polyglot'
-
 " Tagbar
 Plug 'majutsushi/tagbar'
 
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Polyglot
+" Plug 'sheerun/vim-polyglot'
 
 " Fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -50,6 +50,7 @@ call plug#end()
 " Basic Setup
 "============================================================================"
 " plugin
+set autoindent
 filetype plugin indent on
 
 "viminfo
@@ -61,6 +62,7 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 
 " wildmenu
+set shortmess+=c
 set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/node_modules/*,_site,*/__pycache__/,*/venv/*,*/target/*,*/.vim$,\~$,*/.log,*/.aux,*/.cls,*/.aux,*/.bbl,*/.blg,*/.fls,*/.fdb*/,*/.toc,*/.out,*/.glo,*/.log,*/.ist,*/.fdb_latexmk,*.o,*.d,*.out,*.vim
@@ -91,11 +93,6 @@ set mousemodel=popup
 set confirm
 set noshowcmd
 set novisualbell
-set noswapfile
-set nobackup
-set undodir=~/.vim/undodir
-set undofile
-set updatetime=50
 
 "============================================================================"
 " Visual Settings
@@ -197,11 +194,21 @@ inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
 "=============================================================================
 " Autocommand
 "=============================================================================
+augroup Automake
+
 " Remove trailing space on save
 autocmd BufWritePre * %s/\s\+$//e
 
 " vim-comment
 autocmd FileType c setlocal commentstring=//\ %s
+
+" jump to last known position
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+augroup END
 
 "=============================================================================
 " Function
@@ -274,8 +281,8 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <leader>a   <Plug>(coc-codeaction-selected)
+nmap <leader>a   <Plug>(coc-codeaction-selected)
 nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 xmap if <Plug>(coc-funcobj-i)
