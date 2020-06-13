@@ -34,12 +34,12 @@ Plug 'majutsushi/tagbar'
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Polyglot
-" Plug 'sheerun/vim-polyglot'
-
 " Fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
+" Polyglot
+Plug 'sheerun/vim-polyglot'
 
 " Colorscheme
 Plug 'gruvbox-community/gruvbox'
@@ -55,6 +55,7 @@ filetype plugin indent on
 
 "viminfo
 set viminfo+=n~/.cache/vim/viminfo
+set shortmess+=c
 
 " Encoding
 set encoding=utf-8
@@ -62,7 +63,6 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 
 " wildmenu
-set shortmess+=c
 set wildmenu
 set wildmode=longest:full,full
 set wildignore+=*/node_modules/*,_site,*/__pycache__/,*/venv/*,*/target/*,*/.vim$,\~$,*/.log,*/.aux,*/.cls,*/.aux,*/.bbl,*/.blg,*/.fls,*/.fdb*/,*/.toc,*/.out,*/.glo,*/.log,*/.ist,*/.fdb_latexmk,*.o,*.d,*.out,*.vim
@@ -195,19 +195,15 @@ inoremap <silent><expr> <C-[> pumvisible() ? "\<C-[>" : "\<C-[>"
 " Autocommand
 "=============================================================================
 augroup Automake
-
-" Remove trailing space on save
-autocmd BufWritePre * %s/\s\+$//e
-
-" vim-comment
-autocmd FileType c setlocal commentstring=//\ %s
-
-" jump to last known position
-autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
-
+	" Remove trailing space on save
+	autocmd BufWritePre * %s/\s\+$//e
+	" vim-comment
+	autocmd FileType c setlocal commentstring=//\ %s
+	" jump to last known position
+	autocmd BufReadPost *
+	  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+	  \   exe "normal! g`\"" |
+	  \ endif
 augroup END
 
 "=============================================================================
@@ -252,9 +248,11 @@ nmap <leader> gd <Plug>(coc-definition)
 nmap <leader> gy <Plug>(coc-type-definition)
 nmap <leader> gi <Plug>(coc-implementation)
 nmap <leader> gr <Plug>(coc-references)
-nmap <leader>rr <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)
 nmap <leader> [g <Plug>(coc-diagnostic-prev)
 nmap <leader> ]g <Plug>(coc-diagnostic-next)
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
 nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -270,10 +268,6 @@ endfunction
 
 autocmd CursorHold * silent call CocActionAsync('highlight')
 nnoremap <silent> <CR> :nohl<CR>
-
-nmap <leader>rn <Plug>(coc-rename)
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -296,6 +290,7 @@ xmap <silent> <C-d> <Plug>(coc-range-select)
 command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
 nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
 nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
