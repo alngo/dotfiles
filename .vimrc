@@ -1,5 +1,5 @@
 "=============================================================================
-" Vim-Plug core
+" Vim-Plug core => Install Vim-Plug
 "=============================================================================
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
@@ -10,7 +10,7 @@ if !filereadable(vimplug_exists)
   endif
   echo "Installing Vim-Plug..."
   echo ""
-  silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  silent exec "!\curl -fLo " . vimplug_exists . " tmp/--create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
   let g:not_finish_vimplug = "yes"
   autocmd VimEnter * PlugInstall
 endif
@@ -28,14 +28,21 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-obsession'
 
+" Polyglot
+Plug 'sheerun/vim-polyglot'
+
 " Tagbar
 Plug 'majutsushi/tagbar'
 
 " CONQUEROR OF COMPLETION
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Fzf
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 " Colorscheme
-Plug 'alessandroyorba/despacio'
+Plug 'gruvbox-community/gruvbox'
 
 call plug#end()
 
@@ -84,13 +91,19 @@ set mousemodel=popup
 set confirm
 set noshowcmd
 set novisualbell
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+set updatetime=50
 
 "============================================================================"
 " Visual Settings
 "============================================================================"
-silent! colorscheme despacio
+silent! colorscheme gruvbox
 syntax on
 set number
+set relativenumber
 
 " Cursor settings
 let &t_SI.="\e[6 q" "SI = INSERT mode
@@ -197,12 +210,19 @@ autocmd FileType c setlocal commentstring=//\ %s
 "=============================================================================
 " Plugs settings
 "=============================================================================
+" gruvbox
+let g:gruvbox_contrast_dark = 'hard'
+
 " vim-fugitive
 set diffopt=vertical
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=22 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=94 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=89 gui=none guifg=bg guibg=Red
+nnoremap <C-p> :GFiles<CR>
+nmap <leader>gh :diffget //3<CR>
+nmap <leader>gu :diffget //2<CR>
+nmap <leader>gs :G<CR>
 
 " Tagbar
 nnoremap <silent> <C-t> :TagbarToggle<CR>
@@ -221,13 +241,17 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <leader> gd <Plug>(coc-definition)
+nmap <leader> gy <Plug>(coc-type-definition)
+nmap <leader> gi <Plug>(coc-implementation)
+nmap <leader> gr <Plug>(coc-references)
+nmap <leader>rr <Plug>(coc-rename)
+nmap <leader> [g <Plug>(coc-diagnostic-prev)
+nmap <leader> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>gp <Plug>(coc-diagnostic-prev-error)
+nmap <silent> <leader>gn <Plug>(coc-diagnostic-next-error)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <leader>cr :CocRestart
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
