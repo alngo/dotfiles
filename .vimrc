@@ -141,6 +141,7 @@ cnoreabbrev W! w!
 cnoreabbrev Q! q!
 cnoreabbrev Qall! qall!
 cnoreabbrev Wq wq
+cnoreabbrev Wqa wqa
 cnoreabbrev Wa wa
 cnoreabbrev wQ wq
 cnoreabbrev WQ wq
@@ -190,10 +191,6 @@ augroup END
 "" Mappings
 "*****************************************************************************
 
-"" Split
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
-
 "" Git (tpope/vim-fugitive)
 noremap <Leader>ga :Gwrite<CR>
 noremap <Leader>gc :Gcommit<CR>
@@ -213,24 +210,27 @@ nnoremap Y y$
 nnoremap U <C-r>
 
 "" Panes nav
-inoremap <C-h> <C-\><C-N><C-w>h
-inoremap <C-j> <C-\><C-N><C-w>j
-inoremap <C-k> <C-\><C-N><C-w>k
-inoremap <C-l> <C-\><C-N><C-w>l
-tnoremap <C-h> <C-w>h
-tnoremap <C-j> <C-w>j
-tnoremap <C-k> <C-w>k
-tnoremap <C-l> <C-w>l
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
+inoremap <Leader>h <C-\><C-N><C-w>h
+inoremap <Leader>j <C-\><C-N><C-w>j
+inoremap <Leader>k <C-\><C-N><C-w>k
+inoremap <Leader>l <C-\><C-N><C-w>l
+tnoremap <Leader>h <C-w>h
+tnoremap <Leader>j <C-w>j
+tnoremap <Leader>k <C-w>k
+tnoremap <Leader>l <C-w>l
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>h <C-w>h
 
-" terminal emulation
+"" terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
 
-" Tagbar (majutsushi/tagbar)
+"" Tagbar (majutsushi/tagbar)
 nnoremap <silent> <C-t> :TagbarToggle<CR>
+
+"" Mute Highlighting
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 "=============================================================================
 "" Conveniance variables
