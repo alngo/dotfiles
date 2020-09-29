@@ -109,6 +109,7 @@ let g:gruvbox_invert_selection='0'
 
 "" Gutter settings
 set ruler
+set nu
 set relativenumber
 
 "" Cursor settings
