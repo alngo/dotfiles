@@ -31,6 +31,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-rhubarb'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -67,6 +68,11 @@ set mousemodel=popup
 set noerrorbells visualbell t_vb=
 
 set fileformats=unix,dos,mac
+
+"" Cursor settings
+let &t_SI.="\e[6 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
 
 "*****************************************************************************
 "" Visual Settings
