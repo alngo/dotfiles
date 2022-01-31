@@ -35,6 +35,9 @@ fi
 # use i3
 exec i3
 
+# set capslock to control
+setxkbmap -option ctrl:nocaps
+
 twm &
 xclock -geometry 50x50-1+1 &
 xterm -geometry 80x50+494+51 &
