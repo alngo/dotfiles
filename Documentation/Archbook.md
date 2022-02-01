@@ -25,7 +25,7 @@ Dual boot OSX + Lvm on LUks grub Arch
 3. Install any updates
 4. Reboot and perform step 1-3 until no updates are found.
 
-#### [Partitions](https://wiki.archlinux.org/title/Mac#Partitions)
+#### [Mac Partitions](https://wiki.archlinux.org/title/Mac#Partitions)
 > [...] if you plan on keeping OS X for dual booting, you should consider that, by default, a MacBook's drive is formatted using GPT and contains at least **3 partitions**:
 > **EFI**: the ~200 MB EFI system partition.
 > **OS X**: the main partition containing your OS X installation. It is formatted using HFS+.
@@ -72,24 +72,20 @@ Dual boot OSX + Lvm on LUks grub Arch
 ##### Update the system clock
 1. timedatectl set-ntp true
 
-##### Reflector?
-
 ##### Partition the disk ($block-device = sda3)
 1. lsblk
 2. fdisk -l
 
-#### Wipe the disk (dm-crypt)
+##### Wipe the disk (dm-crypt)
 1. cryptsetup open --type plain -d /dev/urandom /dev/$block-device to_be_wiped
 2. lsblk
 3. dd if=/dev/zero of=/dev/mapper/to_be_wiped bs=1M status=progress
 4. cryptsetup close to_be_wiped
 
-
 ##### Preparing the disk
-
 1. cryptsetup luksFormat /dev/sda3
 
-Disk format:
+###### Disk format:
 
 ```
 +-----------------------------------------------------------------------+ +----------------+
@@ -109,51 +105,113 @@ Disk format:
 
 1. cryptsetup open /dev/sda3 cryptlvm
 
-Create a physical volume on top of the opened LUKS container:
+###### Create a physical volume on top of the opened LUKS container:
 
 1. pvcreate /dev/mapper/cryptlvm
 
-Create a volume group
+###### Create a volume group
 
 1. vgcreate arch /dev/mapper/cryptlvm
 
-Create all your logical volumes on the volume group: 
+###### Create all your logical volumes on the volume group: 
 
 1. lvcreate -L 8G arch -n swap
 2. lvcreate -L 32G arch -n root
 3. lvcreate -l 100%FREE arch -n home
 
-Format your filesystems on each logical volume:
+###### Format your filesystems on each logical volume:
 
 1. mkfs.ext4 /dev/arch/root
 2. mkfs.ext4 /dev/arch/home
 3. mkswap /dev/arch/swap
 
-Mount your filesystems:
+###### Mount your filesystems:
 
 1. mount /dev/arch/root /mnt
 2. mkdir /mnt/home
 3. mount /dev/arch/home /mnt/home
 4. swapon /dev/arch/swap
+5. mkdir /mnt/boot
+6. mount /dev/sda1 /mnt/boot 
 
-Prepare the boot partition
-
-1. mkdir /mnt/boot
-2. mount /dev/sda1 /mnt/boot 
-
-Check
+###### Check
 
 1. lsblk
 
 
-# Pacstrap
+##### Installation
+
+###### Install base package
 1.pacstrap /mnt base linux linux-firmware gvim intel-ucode lvm2
 
 ### Configure the system
 
 1. genfstab -U /mnt >> /mnt/etc/fstab
-2. arch-chroot /mnt
-##### Chroot
+2. cat /mnt/etc/fstab
+3. arch-chroot /mnt
+
+#### Time zone
+
+#### Set the time zone:
+1. ln -sf /usr/share/zoneinfo/*Region*/*City* /etc/localtime
+2. hwclock --systohc
+
+#### Locale
+1. Edit /etc/locale.gen and uncomment en_US.UTF-8 UTF-8 and other needed locales.
+2. locale-gen
+3. echo LANG=en_US.UTF-8 > /etc/locale.conf
+
+hostname
+archbook  
+
+hosts
+127.0.0.1 localhost
+::1 localhost
+127.0.1.1 archbook.localdomain archbook
+
+passwd
+
+pacman -S grub networkmanager network-manager-applet wpa_supplicant mtools man-db man-pages dosfstools base-devel linux-headers git bluez bluez-utils pulsaudio pulsaudio-bluetooth alsa-utils efibootmgr xdg-utils xdg-user-dir
+
+vim /etc/mkinitcpio.conf
+```
+HOOKS=(base udev autodetect keyboard keymap modconf block encrypt lvm2  filesystems keyboard fsck)
+```
+
+mkinitcpio -p linux
+
+grub-install --target=x86_64-ei --efi-directory=/boot --bootloader-id=GRUB
+
+vim /etc/default/grub
+```
+GRUB_CMDLINE_MINUX"cryptdevice=UUID=<uuid>:cryptlvm root=/dev/arch/root"
+```
+uncomment GRUB_ENABLED_CRYPTODISK=y
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+systemctl enable NetworkManager
+systemctl enable bluetooth
+
+useradd -mG wheel alngo
+passwd alngo
+EDITOR=vim visudo
+uncomment %wheel ALL=(ALL) ALL
+
+bootctl path=/boot install
+cd /boot/loader
+vim loader.conf
+```
+default arch-*
+```
+cd entries
+vim arch.conf
+```
+title Arch Linux
+linux /vmlinuz-linux
+initrd initramfs-linux.img
+options root=/dev/sda3 rw
+```
 
 
 Resources: 
