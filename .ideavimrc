@@ -1,0 +1,187 @@
+"*****************************************************************************
+"" Emulated Plugins
+"*****************************************************************************
+ 
+set surround
+set NERDTree
+set easymotion
+set ideajoin
+set multiple-cursors
+ 
+"*****************************************************************************
+"" Basic Setup
+
+" Required:
+filetype plugin indent on
+ 
+"" Encoding
+set fileformats=unix,dos,mac
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
+set ttyfast
+ 
+"" Fix backspace indent
+set backspace=indent,eol,start
+ 
+"" Enable hidden buffers
+set hidden
+ 
+"" Searching
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+ 
+"" Mouse Settings
+let no_buffers_menu=1
+set mouse=a
+set mousemodel=popup
+ 
+"" Disable visualbell
+set noerrorbells visualbell t_vb=
+ 
+"" Cursor settings
+let &t_SI.="\e[6 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
+ 
+"" Copy to system clipboard as well
+set clipboard+=unnamed
+ 
+"*****************************************************************************
+"" Visual Settings
+"*****************************************************************************
+syntax on
+set ruler
+set number
+ 
+let no_buffers_menu=1
+colorscheme gruvbox
+ 
+set scrolloff=3
+ 
+"" Color column
+set colorcolumn=80
+ 
+"*****************************************************************************
+"" Abbreviations
+"*****************************************************************************
+"" no one is really happy until you have this shortcuts
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
+ 
+"*****************************************************************************
+"" Mapping
+"*****************************************************************************
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+ 
+"" Copy/Paste/Cut
+if has('unnamedplus')
+                set clipboard=unnamed,unnamedplus
+endif
+ 
+noremap YY "+y<CR>
+noremap XX "+x<CR>
+noremap <leader>p "+gP<CR>
+noremap <Leader>p "_dP
+ 
+"" Utility Logic
+nnoremap Y y$
+nnoremap U <C-r>
+ 
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
+ 
+"" Switching windows
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
+ 
+"" Vmap for maintain Visual Mode after shifting > and <
+vmap < <gv
+vmap > >gv
+ 
+"" Move visual block
+vnoremap J :m '>+1<CR>gv=gv<Cr>
+vnoremap K :m '<-2<CR>gv=gv<Cr>
+ 
+" Use Q for formatting the current paragraph (or visual selection)
+vmap Q gq
+nmap Q gqap
+ 
+" These create newlines like o and O but stay in normal mode
+nmap zj o<Esc>k
+nmap zk O<Esc>j
+ 
+" Closing tabs
+nmap <leader>q :action CloseContent<cr>
+nmap <leader>Q :action ReopenClosedTab<cr>
+ 
+" Switch projects
+nmap <leader>ww :action NextProjectWindow<cr>
+ 
+" Navigation
+nmap <leader>k :action Back<cr>
+nmap <leader>j :action Forward<cr>
+nmap <leader>L :action RecentLocations<cr>
+nmap <leader>u :action FindUsages<cr>
+nmap <leader>C :action CallHierarchy<cr>
+nmap <leader>f :action GotoFile<cr>
+nmap <leader>c :action GotoClass<cr>
+nmap <leader>s :action GotoSymbol<cr>
+nmap <leader>m :action ToggleBookmark<cr>
+nmap <leader>; :action FileStructurePopup<cr>
+nmap <leader>M :action ActivateStructureToolWindow<cr>
+nmap <leader>d :action ShowErrorDescription<cr>
+nmap <leader>i :action GotoImplementation<cr>
+nmap <leader>U :action GotoSuperMethod<cr>
+nmap <leader>I :action SelectIn<cr>
+nmap <leader>e :action RecentChangedFiles<cr>
+nmap <leader>t :action GotoTest<cr>
+nmap <leader>p :action JumpToLastWindow<cr>
+nmap <leader>b :action ShowBookmarks<cr>
+ 
+" Errors
+nmap ]g :action GotoNextError<cr>
+nmap [g :action GotoPreviousError<cr>
+ 
+" Refactorings
+vmap T :action Refactorings.QuickListPopupAction<cr>
+nmap <leader>rg :action Generate<cr>
+nmap <leader>ri :action OptimizeImports<cr>
+nmap <leader>rc :action InspectCode<cr>
+ 
+" unimpaired mappings
+nnoremap [<space> O<esc>j
+nnoremap ]<space> o<esc>k
+nnoremap [q :action PreviousOccurence<cr>
+nnoremap ]q :action NextOccurence<cr>
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr>
+nnoremap [c :action VcsShowPrevChangeMarker<cr>
+nnoremap ]c :action VcsShowNextChangeMarker<cr>
+ 
+" Tabs
+nnoremap [b :action PreviousTab<cr>
+nnoremap ]b :action NextTab<cr>
+ 
+" Search
+nmap <leader>/ :action Find<cr>
+nmap <leader>\ :action FindInPath<cr>
+ 
+" Increase or decrease font size
+nnoremap <C-=> :action EditorIncreaseFontSize<cr>
+nnoremap <C--> :action EditorDecreaseFontSize<cr>
