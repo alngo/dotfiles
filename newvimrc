@@ -47,8 +47,13 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 set ttyfast
 
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
 "" Fix backspace indent
 set backspace=indent,eol,start
+set smartindent
 
 "" Enable hidden buffers
 set hidden
@@ -109,7 +114,7 @@ let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
 let g:netrw_keepdir = 0
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 0
 let g:netrw_altv = 1
 let g:netrw_winsize = 15
 let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
@@ -164,10 +169,6 @@ tnoremap <C-h> <C-w>h
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <silent> <S-t> :tabnew<CR>
-""" Terminal
-tnoremap <Tab> gt
-tnoremap <S-Tab> gT
-tnoremap <silent> <S-t> :tabnew<CR>
 
 "" FZF
 nnoremap <silent> <Leader>f :Files<CR>
