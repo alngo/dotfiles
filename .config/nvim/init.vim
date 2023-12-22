@@ -156,6 +156,7 @@ nnoremap <silent> <S-t> :tabnew<CR>
 
 "" FZF
 nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <Leader>gf :GFiles<CR>
 nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>' :Marks<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
