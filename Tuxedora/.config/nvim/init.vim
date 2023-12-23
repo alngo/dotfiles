@@ -51,14 +51,6 @@ if exists('make')
 endif
 
 "*****************************************************************************
-"" Custom bundles
-"*****************************************************************************
-
-if has('nvim')
-  lua require('init')
-end
-
-"*****************************************************************************
 "*****************************************************************************
 
 "" Include user's extra bundle
@@ -67,6 +59,15 @@ if filereadable(expand("~/.config/nvim/local_bundles.vim"))
 endif
 
 call plug#end()
+
+"*****************************************************************************
+"" Lua
+"*****************************************************************************
+
+if has('nvim')
+  lua require('init')
+end
+
 
 " Required:
 filetype plugin indent on
@@ -168,6 +169,21 @@ set titlestring=%F
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 
+"" Cursor settings
+let &t_SI.="\e[6 q" "SI = INSERT mode
+let &t_SR.="\e[4 q" "SR = REPLACE mode
+let &t_EI.="\e[2 q" "EI = NORMAL mode (ELSE)
+
+"" Netrw
+let g:netrw_keepdir = 0
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 0
+let g:netrw_altv = 1
+let g:netrw_winsize = 15
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
+hi! link netrwMarkFile Search
+
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
 nnoremap n nzzzv
@@ -191,6 +207,17 @@ cnoreabbrev Qall qall
 " terminal emulation
 nnoremap <silent> <leader>sh :terminal<CR>
 
+"" FZF
+nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <Leader>gf :GFiles<CR>
+nnoremap <silent> <Leader>/ :Rg<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>' :Marks<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>H :Helptags<CR>
+nnoremap <silent> <Leader>hh :History<CR>
+nnoremap <silent> <Leader>h: :History:<CR>
+nnoremap <silent> <Leader>h/ :History/<CR> 
 
 "*****************************************************************************
 "" Commands
@@ -207,7 +234,7 @@ if !exists('*s:setupWrapping')
     set wm=2
     set textwidth=79
   endfunction
-endif
+endi
 
 "*****************************************************************************
 "" Autocmd Rules
@@ -265,12 +292,6 @@ set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
 
-" The Silver Searcher
-if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-  set grepprg=ag\ --nogroup\ --nocolor
-endif
-
 " ripgrep
 if executable('rg')
   let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
@@ -283,12 +304,6 @@ nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>e :FZF -m<CR>
 "Recovery commands from history through FZF
 nmap <leader>y :History:<CR>
-
-" snippets
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
 
 " Disable visualbell
 set noerrorbells visualbell t_vb=
