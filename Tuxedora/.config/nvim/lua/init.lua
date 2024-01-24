@@ -18,6 +18,7 @@ local lspconfig = require('lspconfig')
 -- Setup language servers.
 lspconfig.pyright.setup {}
 lspconfig.tsserver.setup {}
+lspconfig.svelte.setup{}
 
 lspconfig.rust_analyzer.setup {
   -- Server-specific settings. See `:help lspconfig-setup`
